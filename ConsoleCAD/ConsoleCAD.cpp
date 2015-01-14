@@ -10,7 +10,7 @@ using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	ConsoleBuffer* x = new ConsoleBuffer();
+	ConsoleBuffer* x = new ConsoleBuffer(200, 25);
 	cin.ignore();
 	ColorChar c;
 	c.c = 'x';
