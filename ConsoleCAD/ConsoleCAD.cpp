@@ -3,13 +3,20 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include "ConsoleBuffer.h"
+#include "Colors.h"
 
 using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	cout << "Hello, world!" << endl;
-
+	ConsoleBuffer* x = new ConsoleBuffer();
+	cin.ignore();
+	ColorChar c;
+	c.c = 'x';
+	c.color = GREEN;
+	x->set(5, 5, c);
+	x->draw();
 	cin.ignore();
 	return 0;
 }
