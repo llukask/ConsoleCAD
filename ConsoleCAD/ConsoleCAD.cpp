@@ -3,18 +3,29 @@
 
 #include "stdafx.h"
 #include <iostream>
-#include "ConsoleBuffer.hpp"
+#include "ConsoleBuffer.h"
+#include "Colors.h"
 
 using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	ConsoleBuffer* buf = new ConsoleBuffer(10, 11);
-	cout << "buffer.size(): " << buf->getBuffer()->size() << endl;
-	cout << "buffer[0].size():   " << buf->getBuffer()->front().size() << endl;
-
-
-
+	ConsoleBuffer* x = new ConsoleBuffer(200, 25);
+	cin.ignore();
+	ColorChar c;
+	for (int i = 0; i < 10; i++) {
+		c.c = (char)i+48;
+		c.color = GREEN;
+		x->set(0, i, c);
+	}
+	x->draw();
+	cin.ignore();
+	for (int i = 0; i < 10; i++) {
+		c.c = (char)i + 48;
+		c.color = GREEN;
+		x->set(5, i, c);
+	}
+	x->draw();
 	cin.ignore();
 	return 0;
 }

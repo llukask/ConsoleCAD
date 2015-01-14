@@ -79,14 +79,18 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ConsoleBuffer.hpp" />
-    <ClInclude Include="Shapes.hpp" />
+    <ClInclude Include="..\..\..\..\..\Downloads\gotoxy.h" />
+    <ClInclude Include="Colors.h" />
+    <ClInclude Include="ConsoleBuffer.h" />
+    <ClInclude Include="ShapeContainer.h" />
+    <ClInclude Include="Shapes.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleBuffer.cpp" />
     <ClCompile Include="ConsoleCAD.cpp" />
+    <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
