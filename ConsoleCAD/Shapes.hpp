@@ -15,3 +15,4 @@ private:
 public:
 	Rectangle(int x, int y, int width, int length);
 };
+
