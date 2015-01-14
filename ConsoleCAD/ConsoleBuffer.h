@@ -1,3 +1,6 @@
+#ifndef CONSOLEBUFFER_H
+#define CONSOLEBUFFER_H
+
 #include <vector>
 #include "Colors.h"
 
@@ -9,16 +12,19 @@ typedef struct ColorChar {
 class ConsoleBuffer {
 private:
 	std::vector<std::vector<ColorChar>> *matrix;
-	void ConsoleBuffer::setcolor(unsigned short color);
+	void setcolor(unsigned short color);
 public:
-	ConsoleBuffer(int sizeX, int sizeY);
-	ConsoleBuffer();
+	ConsoleBuffer(unsigned int sizeX, unsigned int sizeY);
 	~ConsoleBuffer();
-	void set(int x, int y, ColorChar c);
-	ColorChar& get(int x, int y);
+	void set(unsigned int x, unsigned int y, ColorChar c);
+	ColorChar& get(unsigned int x, unsigned int y);
 	void draw();
 	unsigned int sizeX();
 	unsigned int sizeY();
 	void clrscr();
-	void setcurpos(int x, int y);
+	void setcurpos(unsigned int x, unsigned int y);
+	void setSize(unsigned int width, unsigned int height);
+	void clearbuf();
 };
+
+#endif /* CONSOLEBUFFER_H */

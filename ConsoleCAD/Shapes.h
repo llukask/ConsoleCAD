@@ -1,21 +1,28 @@
+#ifndef SHAPES_H
+#define SHAPES_H
+
+#include "ConsoleBuffer.h"
+
 class Point {
 private:
-	int x, y;
+	unsigned int x, y;
 	char c;
 	unsigned short color;
+	bool hidden;
 public:
-	Point(int x, int y, char c, unsigned short color);
+	Point(unsigned int x, unsigned int y, char c, unsigned short color, bool hidden);
 	void Show();
 	void Hide();
 	void MoveX(int dx);
 	void MoveY(int dy);
 	void MoveXY(int dx, int dy);
-	int getX();
-	int getY();
-	int getC();
-	void setC(int c);
-	int getColor();
-	void setColor(int color);
+	unsigned int getX();
+	unsigned int getY();
+	char getC();
+	void setC(char c);
+	unsigned short getColor();
+	void setColor(unsigned short color);
+	void draw(ConsoleBuffer* c);
 };
 
 typedef Point Shape;
@@ -34,3 +41,5 @@ class Line : Shape {
 private:
 	int dx, dy;
 };
+
+#endif /* SHAPES_H */

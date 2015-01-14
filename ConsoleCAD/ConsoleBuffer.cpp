@@ -6,21 +6,12 @@
 
 using namespace std;
 
-ConsoleBuffer::ConsoleBuffer(int x, int y) {
+ConsoleBuffer::ConsoleBuffer(unsigned int x, unsigned int y) {
 	ColorChar standard;
 	standard.c = ' ';
 	standard.color = WHITE;
 	this->matrix = new vector<vector<ColorChar>>(y, vector<ColorChar>(x, standard));
-}
-
-ConsoleBuffer::ConsoleBuffer() {
-	HANDLE hndl = GetStdHandle(STD_OUTPUT_HANDLE);
-	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	GetConsoleScreenBufferInfo(hndl, &csbi);
-	ColorChar standard;
-	standard.c = ' ';
-	standard.color = WHITE;
-	this->matrix = new vector<vector<ColorChar>>(csbi.dwSize.Y, vector<ColorChar>(csbi.dwSize.X, standard));
+	this->setSize(x+1, y+1);
 }
 
 ConsoleBuffer::~ConsoleBuffer() {
@@ -28,19 +19,6 @@ ConsoleBuffer::~ConsoleBuffer() {
 }
 
 void ConsoleBuffer::clrscr() {
-		/*HANDLE hndl = GetStdHandle(STD_OUTPUT_HANDLE);
-		CONSOLE_SCREEN_BUFFER_INFO csbi;
-		GetConsoleScreenBufferInfo(hndl, &csbi);
-		DWORD written;
-		DWORD N = csbi.dwSize.X * csbi.dwCursorPosition.Y +
-			csbi.dwCursorPosition.X + 1;
-		COORD curhome = { 0, 0 };
-
-		FillConsoleOutputCharacter(hndl, ' ', N, curhome, &written);
-		csbi.srWindow.Bottom -= csbi.srWindow.Top;
-		csbi.srWindow.Top = 0;
-		SetConsoleWindowInfo(hndl, TRUE, &csbi.srWindow);
-		SetConsoleCursorPosition(hndl, curhome);*/
 	system("cls");
 }
 
@@ -50,12 +28,19 @@ void ConsoleBuffer::setcolor(unsigned short color)
 	SetConsoleTextAttribute(hCon, color);
 }
 
-void ConsoleBuffer::set(int x, int y, ColorChar c) {
+void ConsoleBuffer::set(unsigned int x, unsigned int y, ColorChar c) {
 	this->get(x,y) = c;
 }
 
-ColorChar& ConsoleBuffer::get(int x, int y) {
-	return this->matrix->at(y).at(x);
+ColorChar& ConsoleBuffer::get(unsigned int x,unsigned int y) {
+	if (x < this->sizeX() && y < this->sizeY()) {
+		return this->matrix->at(y).at(x);
+	}
+	else
+	{
+		ColorChar c;
+		return c;
+	}
 }
 
 void ConsoleBuffer::draw() {
@@ -85,10 +70,38 @@ unsigned int ConsoleBuffer::sizeX() {
 	return minSize;
 }
 
-void ConsoleBuffer::setcurpos(int x, int y) {
+void ConsoleBuffer::setcurpos(unsigned int x, unsigned int y) {
 	HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD co;
 	co.X = x;
 	co.Y = y;
 	SetConsoleCursorPosition(hCon, co);
+}
+
+void ConsoleBuffer::setSize(unsigned int width, unsigned int height) {
+	SMALL_RECT r;
+	COORD      c;
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	HANDLE hConOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (!GetConsoleScreenBufferInfo(hConOut, &csbi))
+		throw runtime_error("You must be attached to a human.");
+
+	r.Left =
+		r.Top = 0;
+	r.Right = width - 1;
+	r.Bottom = height - 1;
+	SetConsoleWindowInfo(hConOut, TRUE, &r);
+
+	c.X = width;
+	c.Y = height;
+	SetConsoleScreenBufferSize(hConOut, c);
+}
+
+void ConsoleBuffer::clearbuf() {
+	ColorChar c;
+	c.c = ' ';
+	c.color = WHITE;
+	for (unsigned int i = 0; i < this->sizeY(); i++) {
+		this->matrix->at(i).assign(this->sizeX(), c);
+	}
 }

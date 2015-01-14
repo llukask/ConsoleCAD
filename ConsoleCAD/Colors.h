@@ -1,3 +1,6 @@
+#ifndef COLORS_H
+#define COLORS_H
+
 #define BLACK         0x00
 #define BLUE          0x01
 #define GREEN         0x02
@@ -14,3 +17,5 @@
 #define LIGHTMAGENTA  0x0D
 #define YELLOW        0x0E
 #define WHITE         0x0F
+
+#endif /* COLORS_H */
