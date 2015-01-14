@@ -13,9 +13,18 @@ int _tmain(int argc, _TCHAR* argv[])
 	ConsoleBuffer* x = new ConsoleBuffer(200, 25);
 	cin.ignore();
 	ColorChar c;
-	c.c = 'x';
-	c.color = GREEN;
-	x->set(5, 5, c);
+	for (int i = 0; i < 10; i++) {
+		c.c = (char)i+48;
+		c.color = GREEN;
+		x->set(0, i, c);
+	}
+	x->draw();
+	cin.ignore();
+	for (int i = 0; i < 10; i++) {
+		c.c = (char)i + 48;
+		c.color = GREEN;
+		x->set(5, i, c);
+	}
 	x->draw();
 	cin.ignore();
 	return 0;

@@ -10,7 +10,6 @@ class ConsoleBuffer {
 private:
 	std::vector<std::vector<ColorChar>> *matrix;
 	void ConsoleBuffer::setcolor(unsigned short color);
-	void setcurpos(int x, int y);
 public:
 	ConsoleBuffer(int sizeX, int sizeY);
 	ConsoleBuffer();
@@ -21,4 +20,5 @@ public:
 	unsigned int sizeX();
 	unsigned int sizeY();
 	void clrscr();
+	void setcurpos(int x, int y);
 };
