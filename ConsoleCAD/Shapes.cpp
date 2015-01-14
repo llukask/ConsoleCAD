@@ -53,3 +53,15 @@ void Point::Show() {
 void Point::Hide() {
 	this->hidden = true;
 }
+
+void Point::draw(ConsoleBuffer* c) {
+	if (this->getX() < c->sizeX() && this->getY() < c->sizeY() && !hidden) {
+		ColorChar cc;
+		cc.c = this->c;
+		cc.color = this->color;
+		c->set(
+			this->getX(),
+			this->getY(),
+			cc);
+	}
+}

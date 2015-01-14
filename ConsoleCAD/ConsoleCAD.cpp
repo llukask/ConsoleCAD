@@ -5,6 +5,7 @@
 #include <iostream>
 #include "ConsoleBuffer.h"
 #include "Colors.h"
+#include "Shapes.h"
 #include <Windows.h>
 
 using namespace std;
@@ -15,23 +16,9 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 
 	ConsoleBuffer* x = new ConsoleBuffer(200,50);
+	Point* p = new Point(10, 10, 'c', CYAN, false);
 	cin.ignore();
-	ColorChar c;
-	for (int i = 0; i < 10; i++) {
-		c.c = (char)i + 48;
-		c.color = LIGHTCYAN;
-		x->set(0, i, c);
-	}
-	x->draw();
-	cin.ignore();
-	for (int i = 0; i < 10; i++) {
-		c.c = (char)i + 48;
-		c.color = GREEN;
-		x->set(5, i, c);
-	}
-	x->draw();
-	cin.ignore();
-	x->clearbuf();
+	p->draw(x);
 	x->draw();
 	cin.ignore();
 	return 0;

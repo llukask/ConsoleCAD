@@ -92,8 +92,8 @@ void ConsoleBuffer::setSize(unsigned int width, unsigned int height) {
 	r.Bottom = height - 1;
 	SetConsoleWindowInfo(hConOut, TRUE, &r);
 
-	c.X = width;
-	c.Y = height;
+	c.X = width + 10;
+	c.Y = height + 10;
 	SetConsoleScreenBufferSize(hConOut, c);
 }
 
