@@ -15,4 +15,4 @@ public:
 	void draw();
 };
 
-#emdif /* SHAPECONTAINER_H */
+#endif /* SHAPECONTAINER_H */

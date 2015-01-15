@@ -1,6 +1,6 @@
 #include "ConsoleBuffer.h"
 #include <vector>
-#include <windows.h>
+#include <Windows.h>
 #include <iostream>
 
 
@@ -92,8 +92,8 @@ void ConsoleBuffer::setSize(unsigned int width, unsigned int height) {
 	r.Bottom = height - 1;
 	SetConsoleWindowInfo(hConOut, TRUE, &r);
 
-	c.X = width + 10;
-	c.Y = height + 10;
+	c.X = width;
+	c.Y = height;
 	SetConsoleScreenBufferSize(hConOut, c);
 }
 
