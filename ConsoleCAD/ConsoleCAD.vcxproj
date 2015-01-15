@@ -90,6 +90,7 @@
   <ItemGroup>
     <ClCompile Include="ConsoleBuffer.cpp" />
     <ClCompile Include="ConsoleCAD.cpp" />
+    <ClCompile Include="ShapeContainer.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>

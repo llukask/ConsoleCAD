@@ -2,6 +2,9 @@
 #define SHAPES_H
 
 #include "ConsoleBuffer.h"
+#include <string>
+
+using namespace std;
 
 class Point {
 private:
@@ -59,6 +62,26 @@ public:
 	unsigned int getRadius();
 	void setRadius(unsigned int radius);
 	virtual void draw(ConsoleBuffer* cb);
+};
+
+class Text : Shape {
+private:
+	string text;
+public:
+	Text(unsigned int x, unsigned int y, char c, unsigned short color, bool hidden, string text);
+	virtual void draw(ConsoleBuffer* cb);
+};
+
+class Triangle : Point {
+private:
+	unsigned int width, height;
+public:
+	Triangle(unsigned int x, unsigned int y, char c, unsigned short color, bool hidden, unsigned int _width, unsigned int _height);
+	void setWidth(unsigned int _width);
+	unsigned int getWidth();
+	void setHeight(unsigned int _height);
+	unsigned int getHeight();
+	virtual void draw();
 };
 
 #endif /* SHAPES_H */

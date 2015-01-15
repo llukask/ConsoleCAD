@@ -1,6 +1,8 @@
 #include "Shapes.h"
 #include "ConsoleBuffer.h"
 
+#include <string>
+
 Point::Point(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden) {
 	x = _x;
 	y = _y;
@@ -92,45 +94,65 @@ void Line::draw(ConsoleBuffer* cb) {
 	ColorChar cc;
 	cc.c = getC();
 	cc.color = getColor();
-	float k = (float)getDx() / getDy();
+	/*float k = (float)getDx() / getDy();
 	float d = (float)getX() - k*(float)getY();
 
-	int _dx;
-	int _dy;
-	int newX;
-	int newY;
+	unsigned int _dx;
+	unsigned int _dy;
+	unsigned int newX;
+	unsigned int newY;
 
 	if (getDx() >= 0) {
-		_dx = getDx();
-		newX = getX();
+	_dx = getDx();
+	newX = getX();
 	}
 	else {
-		_dx = -getDx();
-		newX = getX() - _dx;
+	_dx = -getDx();
+	newX = getX() - _dx;
 	}
 	if (getDy() >= 0) {
-		_dy = getDy();
-		newY = getY();
+	_dy = getDy();
+	newY = getY();
 	}
 	else {
-		_dy = -getDy();
-		newY = getY() - _dy;
+	_dy = -getDy();
+	newY = getY() - _dy;
 	}
 
 	float error = 0;
 	float deltaerr = _dx != 0 ? abs((float)_dy / (float)_dx) : (float)_dy;
 	unsigned int y = newY;
 	unsigned int y1 = y + _dy;
-	for (unsigned int x = newX; x <= (newX + _dx); x++) {
-		cb->set(x, y, cc);
-		error += deltaerr;
-		while (error >= 0.5)
-		{
-			cb->set(x, y, cc);
-			y += 1;
-			error -= 1.0;
-		}
+	if (newX < (newX + _dx)) {
+
 	}
+	for (unsigned int x = newX; x <= (newX + _dx); x++) {
+	cb->set(x, y, cc);
+	error += deltaerr;
+	while (error >= 0.5)
+	{
+	cb->set(x, y, cc);
+	y += 1;
+	error -= 1.0;
+	}
+	}*/
+	int x0 = getX();
+	int x1 = getX() + getDx();
+	int y0 = getY();
+	int y1 = getY() + getDy();
+
+	int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+	int dy = abs(y1 - y0), sy = y0<y1 ? 1 : -1;
+	int err = (dx>dy ? dx : -dy) / 2, e2;
+
+	for (;;){
+		cb->set(x0, y0, cc);
+		if (x0 == x1 && y0 == y1) break;
+		e2 = err;
+		if (e2 > -dx) { err -= dy; x0 += sx; }
+		if (e2 < dy) { err += dx; y0 += sy; }
+	}
+
 }
 
 Rectangle::Rectangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _height, unsigned int _width)
@@ -178,5 +200,40 @@ unsigned int Circle::getRadius() {
 
 void Circle::setRadius(unsigned int _radius) {
 	radius = _radius;
+}
+
+void Circle::draw(ConsoleBuffer* cb) {
+	ColorChar cc;
+	cc.c = getC();
+	cc.color = getColor();
+	const float PI = 3.14159f;
+	float _rad = (float)getRadius();
+	for (float angle = 0.0; angle < 2 * PI; angle += 0.01f) {
+		cb->set(
+			getX() + (unsigned int)floor(_rad*cosf(angle) + 0.5),
+			getY() + (unsigned int)floor(_rad*sinf(angle) + 0.5),
+			cc);
+	}
+}
+
+Text::Text(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, string _text)
+	: Point(_x, _y, _c, _color, _hidden) {
+	text = _text;
+}
+
+void Text::draw(ConsoleBuffer* cb) {
+	int _y = getY();
+	ColorChar cc;
+	cc.color = getColor();
+	for (unsigned int _x = getX(); _x < getX() + text.size(); _x++) {
+		cc.c = text[_x - getX()];
+		cb->set(_x, _y, cc);
+	}
+}
+
+Triangle::Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _height, unsigned int _width)
+	: Point(_x, _y, _c, _color, _hidden) {
+	height = _height;
+	width = _width;
 }
 

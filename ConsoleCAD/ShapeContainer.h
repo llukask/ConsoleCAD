@@ -1,17 +1,21 @@
 #ifndef SHAPECONTAINER_H
 #define SHAPECONTAINER_H
 
-#include <vector>
+//#include <vector>
+#include <map>
+#include <string>
 #include "ConsoleBuffer.h"
 #include "Shapes.h"
 
 class ShapeContainer {
 private:
 	ConsoleBuffer* buffer;
-	std::vector<Shape> shapes;
+	std::map<string, Shape*>* shapes;
+	int counter;
 public:
-	ShapeContainer();
-	void add(Shape);
+	ShapeContainer(int width, int height);
+	void add(Shape*);
+	void add(Shape*, string);
 	void draw();
 };
 
