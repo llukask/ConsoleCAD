@@ -22,18 +22,20 @@ int _tmain(int argc, _TCHAR* argv[])
 	Shape* rect = (Shape*)new Rectangle(26, 1, '#', LIGHTMAGENTA, false, 20, 20);
 	Shape* l1 = (Shape*)new Line(51, 1, '\\', LIGHTBLUE, false, 20, 20);
 	Shape* l2 = (Shape*)new Line(51, 21, '/', LIGHTBLUE, false, 20, -20);
-	Shape* l3 = (Shape*)new Line(76, 21, '-', LIGHTGREEN, false, 30, 0);
-	Shape* l4 = (Shape*)new Line(76, 21, '/', LIGHTGREEN, false, 15, -20);
-	Shape* l5 = (Shape*)new Line(106, 21, '\\', LIGHTGREEN, false, -15, -20);
+	//Shape* l3 = (Shape*)new Line(76, 21, '-', LIGHTGREEN, false, 30, 0);
+	//Shape* l4 = (Shape*)new Line(76, 21, '/', LIGHTGREEN, false, 15, -20);
+	//Shape* l5 = (Shape*)new Line(106, 21, '\\', LIGHTGREEN, false, -15, -20);
+	Shape* tri = (Shape*)new Triangle(76, 21, 'A', LIGHTGREEN, false, 15, -20, 30, 0);
 	Shape* tex = (Shape*)new Text(96, 23, ' ', WHITE, false, "\x0A9 Sony Inc.");
 
 	sc->add(circ);
 	sc->add(rect);
 	sc->add(l1);
 	sc->add(l2);
-	sc->add(l3);
-	sc->add(l4);
-	sc->add(l5);
+	//sc->add(l3);
+	//sc->add(l4);
+	//sc->add(l5);
+	sc->add(tri);
 	sc->add(tex);
 
 	for (int r = 11; r > 9; r--) {

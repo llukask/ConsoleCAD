@@ -74,14 +74,11 @@ public:
 
 class Triangle : Point {
 private:
-	unsigned int width, height;
+	
 public:
-	Triangle(unsigned int x, unsigned int y, char c, unsigned short color, bool hidden, unsigned int _width, unsigned int _height);
-	void setWidth(unsigned int _width);
-	unsigned int getWidth();
-	void setHeight(unsigned int _height);
-	unsigned int getHeight();
-	virtual void draw();
+	Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _dx1, unsigned int _dy1, unsigned int _dx2, unsigned int _dy2);
+	unsigned int dx1, dy1, dx2, dy2;
+	virtual void draw(ConsoleBuffer* cb);
 };
 
 #endif /* SHAPES_H */

@@ -69,7 +69,7 @@ void Point::draw(ConsoleBuffer* c) {
 }
 
 Line::Line(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, int _dx, int _dy)
-	: Point(_x, _y, _c, _color, _hidden) {
+: Point(_x, _y, _c, _color, _hidden) {
 	dx = _dx;
 	dy = _dy;
 }
@@ -156,7 +156,7 @@ void Line::draw(ConsoleBuffer* cb) {
 }
 
 Rectangle::Rectangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _height, unsigned int _width)
-	: Point(_x, _y, _c, _color, _hidden) {
+: Point(_x, _y, _c, _color, _hidden) {
 	width = _width;
 	height = _height;
 }
@@ -190,7 +190,7 @@ void Rectangle::draw(ConsoleBuffer* cb) {
 }
 
 Circle::Circle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _radius)
-	: Point(_x, _y, _c, _color, _hidden) {
+: Point(_x, _y, _c, _color, _hidden) {
 	radius = _radius;
 }
 
@@ -217,7 +217,7 @@ void Circle::draw(ConsoleBuffer* cb) {
 }
 
 Text::Text(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, string _text)
-	: Point(_x, _y, _c, _color, _hidden) {
+: Point(_x, _y, _c, _color, _hidden) {
 	text = _text;
 }
 
@@ -231,9 +231,19 @@ void Text::draw(ConsoleBuffer* cb) {
 	}
 }
 
-Triangle::Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _height, unsigned int _width)
-	: Point(_x, _y, _c, _color, _hidden) {
-	height = _height;
-	width = _width;
+Triangle::Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _dx1, unsigned int _dy1, unsigned int _dx2, unsigned int _dy2)
+: Point(_x, _y, _c, _color, _hidden) {
+	dx1 = _dx1;
+	dy1 = _dy1;
+	dx2 = _dx2;
+	dy2 = _dy2;
 }
 
+void Triangle::draw(ConsoleBuffer* cb) {
+	unsigned int x = getX();
+	unsigned int y = getY();
+
+	Line* l1 = new Line(x, y, getC(), getColor(), false, dx1, dy1);
+	Line* l2 = new Line(x + dx1, y + dy1, getC(), getColor(), false, dx1 - dx2, dy1 - dy2);
+	Line* l3 = new Line(x, y, getC(), getColor(), false, dx2, dy2);
+}
