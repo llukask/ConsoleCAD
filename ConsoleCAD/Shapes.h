@@ -81,7 +81,7 @@ public:
 	unsigned int getWidth();
 	void setHeight(unsigned int _height);
 	unsigned int getHeight();
-	virtual void draw();
+	virtual void draw(ConsoleBuffer* cb);
 };
 
 #endif /* SHAPES_H */

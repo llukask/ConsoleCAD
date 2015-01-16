@@ -237,3 +237,22 @@ Triangle::Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _co
 	width = _width;
 }
 
+void Triangle::setHeight(unsigned int _height) {
+	height = _height;
+}
+
+unsigned int Triangle::getHeight() {
+	return height;
+}
+
+void Triangle::setWidth(unsigned int _width) {
+	width = _width;
+}
+
+unsigned int Triangle::getWidth() {
+	return width;
+}
+
+void Triangle::draw(ConsoleBuffer* cb) {
+
+}
