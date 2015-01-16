@@ -3,6 +3,8 @@
 
 #include <string>
 
+using namespace shapes;
+
 Point::Point(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden) {
 	x = _x;
 	y = _y;
@@ -69,7 +71,7 @@ void Point::draw(ConsoleBuffer* c) {
 }
 
 Line::Line(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, int _dx, int _dy)
-	: Point(_x, _y, _c, _color, _hidden) {
+: Point(_x, _y, _c, _color, _hidden) {
 	dx = _dx;
 	dy = _dy;
 }
@@ -156,7 +158,7 @@ void Line::draw(ConsoleBuffer* cb) {
 }
 
 Rectangle::Rectangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _height, unsigned int _width)
-	: Point(_x, _y, _c, _color, _hidden) {
+: Point(_x, _y, _c, _color, _hidden) {
 	width = _width;
 	height = _height;
 }
@@ -190,7 +192,7 @@ void Rectangle::draw(ConsoleBuffer* cb) {
 }
 
 Circle::Circle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _radius)
-	: Point(_x, _y, _c, _color, _hidden) {
+: Point(_x, _y, _c, _color, _hidden) {
 	radius = _radius;
 }
 
@@ -209,15 +211,50 @@ void Circle::draw(ConsoleBuffer* cb) {
 	const float PI = 3.14159f;
 	float _rad = (float)getRadius();
 	for (float angle = 0.0; angle < 2 * PI; angle += 0.01f) {
-		cb->set(
-			getX() + (unsigned int)floor(_rad*cosf(angle) + 0.5),
-			getY() + (unsigned int)floor(_rad*sinf(angle) + 0.5),
-			cc);
+	cb->set(
+	getX() + (unsigned int)floor(_rad*cosf(angle) + 0.5),
+	getY() + (unsigned int)floor(_rad*sinf(angle) + 0.5),
+	cc);
 	}
+
+	/*unsigned int x0 = getX();
+	unsigned int y0 = getY();
+
+	int f = 1 - radius;
+	int ddF_x = 0;
+	int ddF_y = -2 * radius;
+	int x = 0;
+	int y = radius;
+
+	cb->set(x0, y0 + radius, cc);
+	cb->set(x0, y0 - radius, cc);
+	cb->set(x0 + radius, y0, cc);
+	cb->set(x0 - radius, y0, cc);
+
+	while (x < y)
+	{
+		if (f >= 0)
+		{
+			y--;
+			ddF_y += 2;
+			f += ddF_y;
+		}
+		x++;
+		ddF_x += 2;
+		f += ddF_x + 1;
+		cb->set(x0 + x, y0 + y, cc);
+		cb->set(x0 - x, y0 + y, cc);
+		cb->set(x0 + x, y0 - y, cc);
+		cb->set(x0 - x, y0 - y, cc);
+		cb->set(x0 + y, y0 + x, cc);
+		cb->set(x0 - y, y0 + x, cc);
+		cb->set(x0 + y, y0 - x, cc);
+		cb->set(x0 - y, y0 - x, cc);
+	}*/
 }
 
 Text::Text(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, string _text)
-	: Point(_x, _y, _c, _color, _hidden) {
+: Point(_x, _y, _c, _color, _hidden) {
 	text = _text;
 }
 
@@ -232,7 +269,7 @@ void Text::draw(ConsoleBuffer* cb) {
 }
 
 Triangle::Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _dx1, unsigned int _dy1, unsigned int _dx2, unsigned int _dy2)
-	: Point(_x, _y, _c, _color, _hidden) {
+: Point(_x, _y, _c, _color, _hidden) {
 	dx1 = _dx1;
 	dy1 = _dy1;
 	dx2 = _dx2;

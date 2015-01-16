@@ -7,6 +7,8 @@
 #include "ConsoleBuffer.h"
 #include "Shapes.h"
 
+using namespace shapes;
+
 class ShapeContainer {
 private:
 	ConsoleBuffer* buffer;

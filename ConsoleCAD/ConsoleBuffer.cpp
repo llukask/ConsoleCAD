@@ -45,7 +45,7 @@ ColorChar& ConsoleBuffer::get(unsigned int x,unsigned int y) {
 
 void ConsoleBuffer::draw() {
 	this->clrscr();
-	vector<vector<ColorChar>>* _matrix = this->matrix;
+	/*vector<vector<ColorChar>>* _matrix = this->matrix;
 	for (unsigned int _y = 0; _y < this->sizeY(); _y++) {
 		for (unsigned int _x = 0; _x < this->sizeX(); _x++) {
 			ColorChar& cc = this->get(_x,_y);
@@ -53,7 +53,30 @@ void ConsoleBuffer::draw() {
 			printf("%c", cc.c);
 		}
 		cout << endl;
+	}*/
+	this->setcurpos(0, 0);
+
+	HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	CHAR_INFO* screenBuffer = new CHAR_INFO[sizeX()*sizeY()];
+	int i = 0;
+	for (unsigned int _y = 0; _y < this->sizeY(); _y++) {
+		for (unsigned int _x = 0; _x < this->sizeX(); _x++) {
+			ColorChar& cc = this->get(_x, _y);
+			CHAR_INFO temp;
+			temp.Attributes = cc.color;
+			temp.Char.UnicodeChar = cc.c;
+			screenBuffer[i] = temp;
+			i++;
+		}
 	}
+
+	COORD dwBufferSize = { sizeX(), sizeY() };
+	COORD dwBufferCoord = { 0, 0 };
+	SMALL_RECT rcRegion = { 0, 0, sizeX() - 1, sizeY() - 1 };
+
+	WriteConsoleOutput(hCon, screenBuffer, dwBufferSize, dwBufferCoord, &rcRegion);
+
 	this->setcurpos(0, 0);
 }
 
