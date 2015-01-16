@@ -231,28 +231,19 @@ void Text::draw(ConsoleBuffer* cb) {
 	}
 }
 
-Triangle::Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _height, unsigned int _width)
+Triangle::Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _dx1, unsigned int _dy1, unsigned int _dx2, unsigned int _dy2)
 	: Point(_x, _y, _c, _color, _hidden) {
-	height = _height;
-	width = _width;
-}
-
-void Triangle::setHeight(unsigned int _height) {
-	height = _height;
-}
-
-unsigned int Triangle::getHeight() {
-	return height;
-}
-
-void Triangle::setWidth(unsigned int _width) {
-	width = _width;
-}
-
-unsigned int Triangle::getWidth() {
-	return width;
+	dx1 = _dx1;
+	dy1 = _dy1;
+	dx2 = _dx2;
+	dy2 = _dy2;
 }
 
 void Triangle::draw(ConsoleBuffer* cb) {
+	unsigned int x = getX();
+	unsigned int y = getY();
 
+	Line* l1 = new Line(x, y, getC(), getColor(), false, dx1, dy1);
+	Line* l2 = new Line(x + dx1, y + dy1, getC(), getColor(), false, dx1 - dx2, dy1 - dy2);
+	Line* l3 = new Line(x, y, getC(), getColor(), false, dx2, dy2);
 }
