@@ -77,7 +77,7 @@ private:
 	
 public:
 	Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _dx1, unsigned int _dy1, unsigned int _dx2, unsigned int _dy2);
-	unsigned int dx1, dy1, dx2, dy2;
+	int dx1, dy1, dx2, dy2;
 	virtual void draw(ConsoleBuffer* cb);
 };
 

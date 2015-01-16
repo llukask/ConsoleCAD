@@ -94,48 +94,7 @@ void Line::draw(ConsoleBuffer* cb) {
 	ColorChar cc;
 	cc.c = getC();
 	cc.color = getColor();
-	/*float k = (float)getDx() / getDy();
-	float d = (float)getX() - k*(float)getY();
 
-	unsigned int _dx;
-	unsigned int _dy;
-	unsigned int newX;
-	unsigned int newY;
-
-	if (getDx() >= 0) {
-	_dx = getDx();
-	newX = getX();
-	}
-	else {
-	_dx = -getDx();
-	newX = getX() - _dx;
-	}
-	if (getDy() >= 0) {
-	_dy = getDy();
-	newY = getY();
-	}
-	else {
-	_dy = -getDy();
-	newY = getY() - _dy;
-	}
-
-	float error = 0;
-	float deltaerr = _dx != 0 ? abs((float)_dy / (float)_dx) : (float)_dy;
-	unsigned int y = newY;
-	unsigned int y1 = y + _dy;
-	if (newX < (newX + _dx)) {
-
-	}
-	for (unsigned int x = newX; x <= (newX + _dx); x++) {
-	cb->set(x, y, cc);
-	error += deltaerr;
-	while (error >= 0.5)
-	{
-	cb->set(x, y, cc);
-	y += 1;
-	error -= 1.0;
-	}
-	}*/
 	int x0 = getX();
 	int x1 = getX() + getDx();
 	int y0 = getY();
@@ -244,6 +203,10 @@ void Triangle::draw(ConsoleBuffer* cb) {
 	unsigned int y = getY();
 
 	Line* l1 = new Line(x, y, getC(), getColor(), false, dx1, dy1);
-	Line* l2 = new Line(x + dx1, y + dy1, getC(), getColor(), false, dx1 - dx2, dy1 - dy2);
+	Line* l2 = new Line(x + dx1, y + dy1, getC(), getColor(), false, dx2 - dx1, dy2 - dy1);
 	Line* l3 = new Line(x, y, getC(), getColor(), false, dx2, dy2);
+
+	l1->draw(cb);
+	l2->draw(cb);
+	l3->draw(cb);
 }

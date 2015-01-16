@@ -45,6 +45,7 @@ ColorChar& ConsoleBuffer::get(unsigned int x,unsigned int y) {
 
 void ConsoleBuffer::draw() {
 	this->clrscr();
+	string output;
 	vector<vector<ColorChar>>* _matrix = this->matrix;
 	for (unsigned int _y = 0; _y < this->sizeY(); _y++) {
 		for (unsigned int _x = 0; _x < this->sizeX(); _x++) {
