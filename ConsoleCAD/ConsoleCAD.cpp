@@ -42,6 +42,8 @@ void draw_cool_things() {
 	Shape* text1 = (Shape*)new Text(7, 49, ' ', WHITE, false, "Stargate SG-1");
 	sc->add(text1);
 
+	//Shape* ds_circ1 = (Shape*)new Circle()
+
 	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 	sc->draw();
 	high_resolution_clock::time_point t2 = high_resolution_clock::now();
@@ -52,6 +54,9 @@ void draw_cool_things() {
 int _tmain(int argc, _TCHAR* argv[])
 {
 	cin.ignore();
+	std::string cmd = "create circle 10 10";
+	//auto lamb = [](void) -> void { cout << "I'm a lambda" << endl; };
+	//lamb();
 	draw_cool_things();
 	cin.ignore();
 	return 0;

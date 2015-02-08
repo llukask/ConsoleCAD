@@ -12,12 +12,13 @@ using namespace shapes;
 class ShapeContainer {
 private:
 	ConsoleBuffer* buffer;
-	std::map<string, Shape*>* shapes;
+	std::map<string, Shape*>* shapesMap;
 	int counter;
 public:
 	ShapeContainer(int width, int height);
 	void add(Shape*);
 	void add(Shape*, string);
+	Shape* get(string str);
 	void draw();
 };
 

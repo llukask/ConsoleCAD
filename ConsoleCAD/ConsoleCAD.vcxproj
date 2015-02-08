@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\Downloads\gotoxy.h" />
     <ClInclude Include="Colors.h" />
+    <ClInclude Include="CommandParser.h" />
     <ClInclude Include="ConsoleBuffer.h" />
     <ClInclude Include="ShapeContainer.h" />
     <ClInclude Include="Shapes.h" />

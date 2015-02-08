@@ -3,7 +3,6 @@
 #include <Windows.h>
 #include <iostream>
 
-
 using namespace std;
 
 ConsoleBuffer::ConsoleBuffer(unsigned int x, unsigned int y) {
