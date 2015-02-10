@@ -53,7 +53,8 @@ void ConsoleBuffer::draw() {
 		}
 		cout << endl;
 	}*/
-	this->setcurpos(0, 0);
+	//this->setcurpos(0, 0);
+
 
 	HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -76,7 +77,7 @@ void ConsoleBuffer::draw() {
 
 	WriteConsoleOutput(hCon, screenBuffer, dwBufferSize, dwBufferCoord, &rcRegion);
 
-	this->setcurpos(0, 0);
+	//this->setcurpos(0, 0);
 }
 
 unsigned int ConsoleBuffer::sizeY() {

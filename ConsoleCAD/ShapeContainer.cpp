@@ -23,8 +23,14 @@ Shape* ShapeContainer::get(string str) {
 
 void ShapeContainer::draw() {
 	for (auto iter = shapesMap->begin(); iter != shapesMap->end(); iter++) {
-		iter->second->draw(buffer);
+		if (!iter->second->Hidden()) {
+			iter->second->draw(buffer);
+		}
 	}
 	buffer->clrscr();
 	buffer->draw();
+}
+
+ConsoleBuffer* ShapeContainer::getCBuffer() {
+	return buffer;
 }

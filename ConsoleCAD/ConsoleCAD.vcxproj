@@ -79,7 +79,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Downloads\gotoxy.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="CommandParser.h" />
     <ClInclude Include="ConsoleBuffer.h" />
@@ -87,8 +86,10 @@
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CommandParser.cpp" />
     <ClCompile Include="ConsoleBuffer.cpp" />
     <ClCompile Include="ConsoleCAD.cpp" />
     <ClCompile Include="ShapeContainer.cpp" />

@@ -58,8 +58,12 @@ void Point::Hide() {
 	hidden = true;
 }
 
+bool Point::Hidden() {
+	return hidden;
+}
+
 void Point::draw(ConsoleBuffer* c) {
-	if (getX() < c->sizeX() && getY() < c->sizeY() && !hidden) {
+	if (getX() < c->sizeX() && getY() < c->sizeY()) {
 		ColorChar cc;
 		cc.c = this->c;
 		cc.color = this->color;
@@ -93,27 +97,27 @@ void Line::setDy(int _dy) {
 }
 
 void Line::draw(ConsoleBuffer* cb) {
-	ColorChar cc;
-	cc.c = getC();
-	cc.color = getColor();
+		//Bresenhams line algorithm
+		ColorChar cc;
+		cc.c = getC();
+		cc.color = getColor();
 
-	int x0 = getX();
-	int x1 = getX() + getDx();
-	int y0 = getY();
-	int y1 = getY() + getDy();
+		int x0 = getX();
+		int x1 = getX() + getDx();
+		int y0 = getY();
+		int y1 = getY() + getDy();
 
-	int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-	int dy = abs(y1 - y0), sy = y0<y1 ? 1 : -1;
-	int err = (dx>dy ? dx : -dy) / 2, e2;
+		int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+		int dy = abs(y1 - y0), sy = y0<y1 ? 1 : -1;
+		int err = (dx>dy ? dx : -dy) / 2, e2;
 
-	for (;;){
-		cb->set(x0, y0, cc);
-		if (x0 == x1 && y0 == y1) break;
-		e2 = err;
-		if (e2 > -dx) { err -= dy; x0 += sx; }
-		if (e2 < dy) { err += dx; y0 += sy; }
-	}
-
+		for (;;){
+			cb->set(x0, y0, cc);
+			if (x0 == x1 && y0 == y1) break;
+			e2 = err;
+			if (e2 > -dx) { err -= dy; x0 += sx; }
+			if (e2 < dy) { err += dx; y0 += sy; }
+		}
 }
 
 Rectangle::Rectangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _height, unsigned int _width)
@@ -169,11 +173,11 @@ void Circle::draw(ConsoleBuffer* cb) {
 	cc.color = getColor();
 	const float PI = 3.14159f;
 	float _rad = (float)getRadius();
-	for (float angle = 0.0; angle < 2 * PI; angle += 0.01f) {
-	cb->set(
-	getX() + (unsigned int)floor(_rad*cosf(angle) + 0.5),
-	getY() + (unsigned int)floor(_rad*sinf(angle) + 0.5),
-	cc);
+	for (float angle = 0.0; angle < 2 * PI; angle += 0.05f) {
+		cb->set(
+			getX() + (unsigned int)floor(_rad*cosf(angle) + 0.5),
+			getY() + (unsigned int)floor(_rad*sinf(angle) + 0.5),
+			cc);
 	}
 
 	/*unsigned int x0 = getX();
@@ -192,23 +196,23 @@ void Circle::draw(ConsoleBuffer* cb) {
 
 	while (x < y)
 	{
-		if (f >= 0)
-		{
-			y--;
-			ddF_y += 2;
-			f += ddF_y;
-		}
-		x++;
-		ddF_x += 2;
-		f += ddF_x + 1;
-		cb->set(x0 + x, y0 + y, cc);
-		cb->set(x0 - x, y0 + y, cc);
-		cb->set(x0 + x, y0 - y, cc);
-		cb->set(x0 - x, y0 - y, cc);
-		cb->set(x0 + y, y0 + x, cc);
-		cb->set(x0 - y, y0 + x, cc);
-		cb->set(x0 + y, y0 - x, cc);
-		cb->set(x0 - y, y0 - x, cc);
+	if (f >= 0)
+	{
+	y--;
+	ddF_y += 2;
+	f += ddF_y;
+	}
+	x++;
+	ddF_x += 2;
+	f += ddF_x + 1;
+	cb->set(x0 + x, y0 + y, cc);
+	cb->set(x0 - x, y0 + y, cc);
+	cb->set(x0 + x, y0 - y, cc);
+	cb->set(x0 - x, y0 - y, cc);
+	cb->set(x0 + y, y0 + x, cc);
+	cb->set(x0 - y, y0 + x, cc);
+	cb->set(x0 + y, y0 - x, cc);
+	cb->set(x0 - y, y0 - x, cc);
 	}*/
 }
 

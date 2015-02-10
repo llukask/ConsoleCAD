@@ -7,13 +7,36 @@
 #include "Colors.h"
 #include "Shapes.h"
 #include "ShapeContainer.h"
+#include "CommandParser.h"
 #include <chrono>
+#include <sstream>
+#include <map>
+#include "utility.h"
 
 
 using namespace std;
 using namespace std::chrono;
 
-void draw_cool_things() {
+ShapeContainer* sc;
+
+const map<string, unsigned short> colorMap = { { "black", 0x00 },
+												{ "blue", 0x01 },
+												{ "green", 0x02 },
+												{ "cyan", 0x03 },
+												{ "red", 0x04 },
+												{ "magenta", 0x05 },
+												{ "brown", 0x06 },
+												{ "lightgray", 0x07 },
+												{ "darkgray", 0x08 },
+												{ "lightblue", 0x09 },
+												{ "lightgreen", 0x0A },
+												{ "lightcyan", 0x0B },
+												{ "lightred", 0x0C },
+												{ "lightmagenta", 0x0D },
+												{ "yellow", 0x0E },
+												{ "white", 0x0F } };
+
+void draw_cool_things(vector<string>* args) {
 	ShapeContainer* sc = new ShapeContainer(107, 50);
 	Shape* circ = (Shape*)new Circle(11, 11, '*', RED, false, 10);
 	Shape* rect = (Shape*)new shapes::Rectangle(26, 1, '#', LIGHTMAGENTA, false, 20, 20);
@@ -51,14 +74,56 @@ void draw_cool_things() {
 	cout << dur;
 }
 
-int _tmain(int argc, _TCHAR* argv[])
-{
-	cin.ignore();
-	std::string cmd = "create circle 10 10";
-	//auto lamb = [](void) -> void { cout << "I'm a lambda" << endl; };
-	//lamb();
-	draw_cool_things();
-	cin.ignore();
+void hello_world(vector<string>* args) {
+	for (auto el : *args) {
+		cout << el << endl;
+	}
+}
+
+void create_circle(vector<string>* args) {
+	int x, y, r;
+	char c;
+	string name;
+	unsigned short color;
+	x = fromString<int>(args->at(0));
+	y = fromString<int>(args->at(1));
+	r = fromString<int>(args->at(2));
+	c = fromString<char>(args->at(3));
+	name = args->at(4);
+	color = colorMap.at(args->at(5));
+	Circle* circle = new Circle(x, y, c, color, false, r);
+	sc->add((Shape*)circle, name);
+	sc->draw();
+}
+
+void hide(vector<string>* args) {
+	string name = args->at(0);
+ 	sc->get(name)->Hide();
+	sc->draw();
+}
+
+CommandNode* build_command_tree() {
+	CommandNode* root = new CommandNode();
+	root->AddSubcommand("hello", new CommandNode(hello_world));
+	root->AddSubcommand("pst", new CommandNode(draw_cool_things));
+	root->AddSubcommand("hide", new CommandNode(hide));
+	CommandNode* create = new CommandNode();
+	create->AddSubcommand("circle", new CommandNode(create_circle));
+	root->AddSubcommand("create", create);
+	return root;
+}
+
+int _tmain(int argc, _TCHAR* argv[]) {
+	CommandNode* root = build_command_tree();
+	sc = new ShapeContainer(100, 100);
+
+	do {
+		sc->getCBuffer()->setcurpos(0, 50);
+		std::string cmd;
+		std::getline(std::cin, cmd);
+		root->walk(cmd);
+	} while (true);
+
 	return 0;
 }
 

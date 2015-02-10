@@ -17,6 +17,7 @@ namespace shapes {
 		Point(unsigned int x, unsigned int y, char c, unsigned short color, bool hidden);
 		void Show();
 		void Hide();
+		bool Hidden();
 		void MoveX(int dx);
 		void MoveY(int dy);
 		void MoveXY(int dx, int dy);
@@ -75,7 +76,7 @@ namespace shapes {
 		virtual void draw(ConsoleBuffer* cb);
 	};
 
-	class Triangle : Point {
+	class Triangle : Shape {
 	private:
 
 	public:

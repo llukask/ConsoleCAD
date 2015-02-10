@@ -20,6 +20,7 @@ public:
 	void add(Shape*, string);
 	Shape* get(string str);
 	void draw();
+	ConsoleBuffer* getCBuffer();
 };
 
 #endif /* SHAPECONTAINER_H */
