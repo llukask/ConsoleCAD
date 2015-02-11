@@ -6,15 +6,17 @@
 
 using namespace std;
 
+
 namespace shapes {
-	class Point {
+
+	class Shape {
 	private:
 		unsigned int x, y;
 		char c;
 		unsigned short color;
 		bool hidden;
 	public:
-		Point(unsigned int x, unsigned int y, char c, unsigned short color, bool hidden);
+		Shape(unsigned int x, unsigned int y, char c, unsigned short color, bool hidden);
 		void Show();
 		void Hide();
 		bool Hidden();
@@ -28,9 +30,10 @@ namespace shapes {
 		unsigned short getColor();
 		void setColor(unsigned short color);
 		virtual void draw(ConsoleBuffer* c);
+		virtual Shape* copy();
 	};
 
-	typedef Point Shape;
+	typedef Shape Point;
 
 	class Line : Shape {
 	private:
@@ -42,6 +45,7 @@ namespace shapes {
 		int getDy();
 		void setDy(int dy);
 		virtual void draw(ConsoleBuffer* cb);
+		virtual Shape* copy();
 	};
 
 	class Rectangle : Shape {
@@ -54,6 +58,7 @@ namespace shapes {
 		unsigned int getHeight();
 		void setHeight(unsigned int height);
 		virtual void draw(ConsoleBuffer* cb);
+		virtual Shape* copy();
 	};
 
 	typedef Rectangle MyRectangle;
@@ -66,6 +71,7 @@ namespace shapes {
 		unsigned int getRadius();
 		void setRadius(unsigned int radius);
 		virtual void draw(ConsoleBuffer* cb);
+		//virtual Shape* copy();
 	};
 
 	class Text : Shape {
@@ -74,6 +80,7 @@ namespace shapes {
 	public:
 		Text(unsigned int x, unsigned int y, char c, unsigned short color, bool hidden, string text);
 		virtual void draw(ConsoleBuffer* cb);
+		//virtual Shape* copy();
 	};
 
 	class Triangle : Shape {
@@ -83,6 +90,7 @@ namespace shapes {
 		Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _dx1, unsigned int _dy1, unsigned int _dx2, unsigned int _dy2);
 		unsigned int dx1, dy1, dx2, dy2;
 		virtual void draw(ConsoleBuffer* cb);
+		//virtual Shape* copy();
 	};
 
 }

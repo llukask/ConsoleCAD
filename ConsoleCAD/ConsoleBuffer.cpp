@@ -11,6 +11,8 @@ ConsoleBuffer::ConsoleBuffer(unsigned int x, unsigned int y) {
 	standard.color = WHITE;
 	this->matrix = new vector<vector<ColorChar>>(y, vector<ColorChar>(x, standard));
 	this->setSize(x+1, y+1);
+	size_x = x;
+	size_y = y;
 }
 
 ConsoleBuffer::~ConsoleBuffer() {
@@ -43,7 +45,7 @@ ColorChar& ConsoleBuffer::get(unsigned int x,unsigned int y) {
 }
 
 void ConsoleBuffer::draw() {
-	this->clrscr();
+	//this->clrscr();
 	/*vector<vector<ColorChar>>* _matrix = this->matrix;
 	for (unsigned int _y = 0; _y < this->sizeY(); _y++) {
 		for (unsigned int _x = 0; _x < this->sizeX(); _x++) {
@@ -60,8 +62,8 @@ void ConsoleBuffer::draw() {
 
 	CHAR_INFO* screenBuffer = new CHAR_INFO[sizeX()*sizeY()];
 	int i = 0;
-	for (unsigned int _y = 0; _y < this->sizeY(); _y++) {
-		for (unsigned int _x = 0; _x < this->sizeX(); _x++) {
+	for (unsigned int _y = 0; _y < size_y; _y++) {
+		for (unsigned int _x = 0; _x < size_x; _x++) {
 			ColorChar& cc = this->get(_x, _y);
 			CHAR_INFO temp;
 			temp.Attributes = cc.color;
@@ -81,16 +83,18 @@ void ConsoleBuffer::draw() {
 }
 
 unsigned int ConsoleBuffer::sizeY() {
-	return this->matrix->size();
+	//return this->matrix->size();
+	return size_y;
 }
 
 unsigned int ConsoleBuffer::sizeX() {
-	unsigned int minSize = MAXUINT;
-	for (vector<vector<ColorChar>>::size_type _y = 0; _y < this->matrix->size(); _y++) {
-		unsigned int size = this->matrix->at(_y).size();
-		minSize = size < minSize ? size : minSize;
-	}
-	return minSize;
+	//unsigned int minSize = MAXUINT;
+	//for (vector<vector<ColorChar>>::size_type _y = 0; _y < this->matrix->size(); _y++) {
+	//	unsigned int size = this->matrix->at(_y).size();
+	//	minSize = size < minSize ? size : minSize;
+	//}
+	//return minSize;
+	return size_x;
 }
 
 void ConsoleBuffer::setcurpos(unsigned int x, unsigned int y) {
@@ -108,6 +112,8 @@ void ConsoleBuffer::setSize(unsigned int width, unsigned int height) {
 	HANDLE hConOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (!GetConsoleScreenBufferInfo(hConOut, &csbi))
 		throw runtime_error("You must be attached to a human.");
+
+	bool temp;
 
 	r.Left =
 		r.Top = 0;

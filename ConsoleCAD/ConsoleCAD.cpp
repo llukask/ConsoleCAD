@@ -13,31 +13,33 @@
 #include <map>
 #include "utility.h"
 
+#define WIDTH 200
+#define HEIGHT 100
 
 using namespace std;
 using namespace std::chrono;
 
 ShapeContainer* sc;
 
-const map<string, unsigned short> colorMap = { { "black", 0x00 },
-												{ "blue", 0x01 },
-												{ "green", 0x02 },
-												{ "cyan", 0x03 },
-												{ "red", 0x04 },
-												{ "magenta", 0x05 },
-												{ "brown", 0x06 },
-												{ "lightgray", 0x07 },
-												{ "darkgray", 0x08 },
-												{ "lightblue", 0x09 },
-												{ "lightgreen", 0x0A },
-												{ "lightcyan", 0x0B },
-												{ "lightred", 0x0C },
-												{ "lightmagenta", 0x0D },
-												{ "yellow", 0x0E },
-												{ "white", 0x0F } };
+const map<string, unsigned short> colorMap = { { "black", BLACK },
+												{ "blue", BLUE },
+												{ "green", GREEN },
+												{ "cyan", CYAN },
+												{ "red", RED },
+												{ "magenta", MAGENTA },
+												{ "brown", BROWN },
+												{ "lightgray", LIGHTGRAY },
+												{ "darkgray", DARKGRAY },
+												{ "lightblue", LIGHTBLUE },
+												{ "lightgreen", LIGHTGREEN },
+												{ "lightcyan", LIGHTCYAN },
+												{ "lightred", LIGHTRED },
+												{ "lightmagenta", LIGHTMAGENTA },
+												{ "yellow", YELLOW },
+												{ "white", WHITE } };
 
 void draw_cool_things(vector<string>* args) {
-	ShapeContainer* sc = new ShapeContainer(107, 50);
+	//ShapeContainer* sc = new ShapeContainer(107, 50);
 	Shape* circ = (Shape*)new Circle(11, 11, '*', RED, false, 10);
 	Shape* rect = (Shape*)new shapes::Rectangle(26, 1, '#', LIGHTMAGENTA, false, 20, 20);
 	Shape* l1 = (Shape*)new Line(51, 1, '\\', LIGHTBLUE, false, 20, 20);
@@ -66,7 +68,6 @@ void draw_cool_things(vector<string>* args) {
 	sc->add(text1);
 
 	//Shape* ds_circ1 = (Shape*)new Circle()
-
 	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 	sc->draw();
 	high_resolution_clock::time_point t2 = high_resolution_clock::now();
@@ -94,6 +95,7 @@ void create_circle(vector<string>* args) {
 	Circle* circle = new Circle(x, y, c, color, false, r);
 	sc->add((Shape*)circle, name);
 	sc->draw();
+	cout << args->size() << endl;
 }
 
 void hide(vector<string>* args) {
@@ -115,15 +117,22 @@ CommandNode* build_command_tree() {
 
 int _tmain(int argc, _TCHAR* argv[]) {
 	CommandNode* root = build_command_tree();
-	sc = new ShapeContainer(100, 100);
+	sc = new ShapeContainer(WIDTH, HEIGHT);
 
-	do {
+	/*do {
 		sc->getCBuffer()->setcurpos(0, 50);
 		std::string cmd;
 		std::getline(std::cin, cmd);
 		root->walk(cmd);
 	} while (true);
+	cin.ignore();*/
 
+	for (int i = 100; i >= 0; i--) {
+		Circle* c = new Circle(100, 50, 'o', i % 15, false, i);
+		c->draw(sc->getCBuffer());
+		sc->getCBuffer()->draw();
+	}
+ 
 	return 0;
 }
 

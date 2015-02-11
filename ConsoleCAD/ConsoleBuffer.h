@@ -12,6 +12,7 @@ typedef struct ColorChar {
 class ConsoleBuffer {
 private:
 	std::vector<std::vector<ColorChar>> *matrix;
+	unsigned int size_x, size_y;
 	void setcolor(unsigned short color);
 public:
 	ConsoleBuffer(unsigned int sizeX, unsigned int sizeY);

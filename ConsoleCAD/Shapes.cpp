@@ -5,7 +5,7 @@
 
 using namespace shapes;
 
-Point::Point(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden) {
+Shape::Shape(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden) {
 	x = _x;
 	y = _y;
 	c = _c;
@@ -13,56 +13,60 @@ Point::Point(unsigned int _x, unsigned int _y, char _c, unsigned short _color, b
 	hidden = _hidden;
 }
 
-unsigned int Point::getX() {
+unsigned int Shape::getX() {
 	return x;
 }
 
-void Point::MoveX(int dx) {
+void Shape::MoveX(int dx) {
 	x += dx;
 }
 
-unsigned int Point::getY() {
+unsigned int Shape::getY() {
 	return y;
 }
 
-void Point::MoveY(int dy) {
+void Shape::MoveY(int dy) {
 	y += dy;
 }
 
-void Point::MoveXY(int dx, int dy) {
+void Shape::MoveXY(int dx, int dy) {
 	MoveX(dx);
 	MoveY(dy);
 }
 
-char Point::getC() {
+char Shape::getC() {
 	return c;
 }
 
-void Point::setC(char _c) {
+void Shape::setC(char _c) {
 	c = _c;
 }
 
-unsigned short Point::getColor() {
+unsigned short Shape::getColor() {
 	return color;
 }
 
-void Point::setColor(unsigned short _color) {
+void Shape::setColor(unsigned short _color) {
 	color = _color;
 }
 
-void Point::Show() {
+void Shape::Show() {
 	hidden = false;
 }
 
-void Point::Hide() {
+void Shape::Hide() {
 	hidden = true;
 }
 
-bool Point::Hidden() {
+bool Shape::Hidden() {
 	return hidden;
 }
 
-void Point::draw(ConsoleBuffer* c) {
+Shape* Shape::copy() {
+	return new Shape(getX(), getY(), getC(), getColor(), Hidden());
+}
+
+void Shape::draw(ConsoleBuffer* c) {
 	if (getX() < c->sizeX() && getY() < c->sizeY()) {
 		ColorChar cc;
 		cc.c = this->c;
@@ -75,7 +79,7 @@ void Point::draw(ConsoleBuffer* c) {
 }
 
 Line::Line(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, int _dx, int _dy)
-: Point(_x, _y, _c, _color, _hidden) {
+: Shape(_x, _y, _c, _color, _hidden) {
 	dx = _dx;
 	dy = _dy;
 }
@@ -120,8 +124,12 @@ void Line::draw(ConsoleBuffer* cb) {
 		}
 }
 
+Shape* Line::copy() {
+	return new Line(getX(), getY(), getC(), getColor(), Hidden(), getDx(), getDy());
+}
+
 Rectangle::Rectangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _height, unsigned int _width)
-: Point(_x, _y, _c, _color, _hidden) {
+: Shape(_x, _y, _c, _color, _hidden) {
 	width = _width;
 	height = _height;
 }
@@ -154,8 +162,12 @@ void Rectangle::draw(ConsoleBuffer* cb) {
 	li4->draw(cb);
 }
 
+Shape* Rectangle::copy() {
+	return new Rectangle(getX(), getY(), getC(), getColor(), Hidden(), getHeight(), getWidth());
+}
+
 Circle::Circle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _radius)
-: Point(_x, _y, _c, _color, _hidden) {
+: Shape(_x, _y, _c, _color, _hidden) {
 	radius = _radius;
 }
 
@@ -171,16 +183,16 @@ void Circle::draw(ConsoleBuffer* cb) {
 	ColorChar cc;
 	cc.c = getC();
 	cc.color = getColor();
-	const float PI = 3.14159f;
+	/*const float PI = 3.14159f;
 	float _rad = (float)getRadius();
-	for (float angle = 0.0; angle < 2 * PI; angle += 0.05f) {
+	for (float angle = 0.0f; angle < 2 * PI; angle += 0.08f) {
 		cb->set(
 			getX() + (unsigned int)floor(_rad*cosf(angle) + 0.5),
 			getY() + (unsigned int)floor(_rad*sinf(angle) + 0.5),
 			cc);
-	}
+	}*/
 
-	/*unsigned int x0 = getX();
+	unsigned int x0 = getX();
 	unsigned int y0 = getY();
 
 	int f = 1 - radius;
@@ -213,11 +225,11 @@ void Circle::draw(ConsoleBuffer* cb) {
 	cb->set(x0 - y, y0 + x, cc);
 	cb->set(x0 + y, y0 - x, cc);
 	cb->set(x0 - y, y0 - x, cc);
-	}*/
+	}
 }
 
 Text::Text(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, string _text)
-: Point(_x, _y, _c, _color, _hidden) {
+: Shape(_x, _y, _c, _color, _hidden) {
 	text = _text;
 }
 
@@ -232,7 +244,7 @@ void Text::draw(ConsoleBuffer* cb) {
 }
 
 Triangle::Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _dx1, unsigned int _dy1, unsigned int _dx2, unsigned int _dy2)
-: Point(_x, _y, _c, _color, _hidden) {
+: Shape(_x, _y, _c, _color, _hidden) {
 	dx1 = _dx1;
 	dy1 = _dy1;
 	dx2 = _dx2;

@@ -18,8 +18,10 @@ public:
 	ShapeContainer(int width, int height);
 	void add(Shape*);
 	void add(Shape*, string);
+	void copy(std::string name, std::string copied_name);
 	Shape* get(string str);
 	void draw();
+	void draw(bool clear);
 	ConsoleBuffer* getCBuffer();
 };
 
