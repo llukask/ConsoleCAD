@@ -113,8 +113,6 @@ void ConsoleBuffer::setSize(unsigned int width, unsigned int height) {
 	if (!GetConsoleScreenBufferInfo(hConOut, &csbi))
 		throw runtime_error("You must be attached to a human.");
 
-	bool temp;
-
 	r.Left =
 		r.Top = 0;
 	r.Right = width - 1;

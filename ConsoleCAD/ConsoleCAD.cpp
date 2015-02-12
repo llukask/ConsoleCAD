@@ -119,20 +119,18 @@ int _tmain(int argc, _TCHAR* argv[]) {
 	CommandNode* root = build_command_tree();
 	sc = new ShapeContainer(WIDTH, HEIGHT);
 
-	/*do {
-		sc->getCBuffer()->setcurpos(0, 50);
-		std::string cmd;
-		std::getline(std::cin, cmd);
-		root->walk(cmd);
-	} while (true);
-	cin.ignore();*/
-
 	for (int i = 100; i >= 0; i--) {
 		Circle* c = new Circle(100, 50, 'o', i % 15, false, i);
 		c->draw(sc->getCBuffer());
 		sc->getCBuffer()->draw();
 	}
- 
+	do {
+		sc->getCBuffer()->setcurpos(0, 50);
+		std::string cmd;
+		std::getline(std::cin, cmd);
+		root->walk(cmd);
+	} while (true);
+	cin.ignore();
 	return 0;
 }
 
