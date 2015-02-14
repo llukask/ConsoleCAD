@@ -35,7 +35,7 @@ namespace shapes {
 
 	typedef Shape Point;
 
-	class Line : Shape {
+	class Line : public Shape {
 	private:
 		int dx, dy;
 	public:
@@ -48,7 +48,7 @@ namespace shapes {
 		virtual Shape* copy();
 	};
 
-	class Rectangle : Shape {
+	class Rectangle : public Shape {
 	private:
 		int height, width;
 	public:
@@ -63,7 +63,7 @@ namespace shapes {
 
 	typedef Rectangle MyRectangle;
 
-	class Circle : Shape {
+	class Circle : public Shape {
 	private:
 		int radius;
 	public:
@@ -74,7 +74,7 @@ namespace shapes {
 		//virtual Shape* copy();
 	};
 
-	class Text : Shape {
+	class Text : public Shape {
 	private:
 		string text;
 	public:
@@ -83,7 +83,7 @@ namespace shapes {
 		//virtual Shape* copy();
 	};
 
-	class Triangle : Shape {
+	class Triangle : public Shape {
 	private:
 
 	public:

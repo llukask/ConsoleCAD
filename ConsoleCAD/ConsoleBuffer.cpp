@@ -10,7 +10,8 @@ ConsoleBuffer::ConsoleBuffer(unsigned int x, unsigned int y) {
 	standard.c = ' ';
 	standard.color = WHITE;
 	this->matrix = new vector<vector<ColorChar>>(y, vector<ColorChar>(x, standard));
-	this->setSize(x+1, y+1);
+	//this->setSize(x+1, y+1);
+	this->setSize(x, y);
 	size_x = x;
 	size_y = y;
 }
@@ -34,8 +35,8 @@ void ConsoleBuffer::set(unsigned int x, unsigned int y, ColorChar c) {
 }
 
 ColorChar& ConsoleBuffer::get(unsigned int x,unsigned int y) {
-	if (x < this->sizeX() && y < this->sizeY()) {
-		return this->matrix->at(y).at(x);
+	if (x < this->size_x && y < this->size_y) {
+		return (*this->matrix)[y][x];
 	}
 	else
 	{
@@ -112,8 +113,6 @@ void ConsoleBuffer::setSize(unsigned int width, unsigned int height) {
 	HANDLE hConOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (!GetConsoleScreenBufferInfo(hConOut, &csbi))
 		throw runtime_error("You must be attached to a human.");
-
-	bool temp;
 
 	r.Left =
 		r.Top = 0;
