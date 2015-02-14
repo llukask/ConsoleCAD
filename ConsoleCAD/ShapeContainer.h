@@ -6,6 +6,7 @@
 #include <string>
 #include "ConsoleBuffer.h"
 #include "Shapes.h"
+#include <mutex>
 
 using namespace shapes;
 
@@ -14,6 +15,7 @@ private:
 	ConsoleBuffer* buffer;
 	std::map<string, Shape*>* shapesMap;
 	int counter;
+	mutex mtx;
 public:
 	ShapeContainer(int width, int height);
 	void add(Shape*);

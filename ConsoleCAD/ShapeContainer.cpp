@@ -15,7 +15,9 @@ ShapeContainer::ShapeContainer(int width, int height) {
 }
 
 void ShapeContainer::add(Shape* s, string str) {
+	mtx.lock();
 	shapesMap->insert(std::pair<std::string, Shape*>(str, s));
+	mtx.unlock();
 }
 
 void ShapeContainer::add(Shape* s) {
@@ -23,7 +25,9 @@ void ShapeContainer::add(Shape* s) {
 }
 
 Shape* ShapeContainer::get(string str) {
-	return shapesMap->find(str)->second;
+	mtx.lock();
+	Shape* ret = shapesMap->find(str)->second;
+	return ret;
 }
 
 void ShapeContainer::draw() {
