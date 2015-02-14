@@ -7,6 +7,7 @@ using namespace std;
 
 ConsoleBuffer::ConsoleBuffer(unsigned int x, unsigned int y) {
 	ColorChar standard;
+	x += 2;
 	standard.c = ' ';
 	standard.color = WHITE;
 	this->matrix = new vector<vector<ColorChar>>(y, vector<ColorChar>(x, standard));

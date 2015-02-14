@@ -93,6 +93,10 @@ namespace shapes {
 		//virtual Shape* copy();
 	};
 
+	class TextBox : public Shape {
+
+	};
+
 }
 
 

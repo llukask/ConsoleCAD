@@ -153,7 +153,7 @@ void Rectangle::setWidth(unsigned int _width) {
 void Rectangle::draw(ConsoleBuffer* cb) {
 	//disassemble a rectangle into four lines 
 	Line* li1 = new Line(getX(), getY(), getC(), getColor(), false, (signed int)getWidth(), 0);
-	Line* li2 = new Line(getX() + getWidth(), getY(), getC(), getColor(), false, 0, (signed int)getHeight());
+false, 0, (signed int)getHeight());
 	Line* li3 = new Line(getX() + getWidth(), getY() + getHeight(), getC(), getColor(), false, -(signed int)getWidth(), 0);
 	Line* li4 = new Line(getX(), getY() + getHeight(), getC(), getColor(), false, 0, -(signed int)getHeight());
 	li1->draw(cb);

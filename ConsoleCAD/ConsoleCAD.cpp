@@ -13,8 +13,8 @@
 #include <map>
 #include "utility.h"
 
-#define WIDTH 200
-#define HEIGHT 100
+#define WIDTH 50
+#define HEIGHT 50
 
 using namespace std;
 using namespace std::chrono;
@@ -82,20 +82,22 @@ void hello_world(vector<string>* args) {
 }
 
 void create_circle(vector<string>* args) {
-	int x, y, r;
-	char c;
-	string name;
-	unsigned short color;
-	x = fromString<int>(args->at(0));
-	y = fromString<int>(args->at(1));
-	r = fromString<int>(args->at(2));
-	c = fromString<char>(args->at(3));
-	name = args->at(4);
-	color = colorMap.at(args->at(5));
-	Circle* circle = new Circle(x, y, c, color, false, r);
-	sc->add((Shape*)circle, name);
-	sc->draw();
-	cout << args->size() << endl;
+	if (args->size() == 6) {
+		int x, y, r;
+		char c;
+		string name;
+		unsigned short color;
+		x = fromString<int>(args->at(0));
+		y = fromString<int>(args->at(1));
+		r = fromString<int>(args->at(2));
+		c = fromString<char>(args->at(3));
+		name = args->at(4);
+		color = colorMap.at(args->at(5));
+		Circle* circle = new Circle(x, y, c, color, false, r);
+		sc->add((Shape*)circle, name);
+		sc->draw();
+	}
+	
 }
 
 void hide(vector<string>* args) {
@@ -119,13 +121,14 @@ int _tmain(int argc, _TCHAR* argv[]) {
 	CommandNode* root = build_command_tree();
 	sc = new ShapeContainer(WIDTH, HEIGHT);
 
-	for (int i = 100; i >= 0; i--) {
-		Circle* c = new Circle(100, 50, 'o', i % 15, false, i);
+	for (int i = HEIGHT/2; i >= 0; i--) {
+		Circle* c = new Circle(WIDTH/2, HEIGHT/2, 'o', i % 15, false, i);
 		c->draw(sc->getCBuffer());
 		sc->getCBuffer()->draw();
 	}
 	do {
-		sc->getCBuffer()->setcurpos(0, 50);
+		sc->draw(true);
+		sc->getCBuffer()->setcurpos(0, HEIGHT);
 		std::string cmd;
 		std::getline(std::cin, cmd);
 		root->walk(cmd);
