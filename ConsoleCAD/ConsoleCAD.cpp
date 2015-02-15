@@ -15,8 +15,12 @@
 
 #define WIDTH 200
 #define HEIGHT 100
-#define CHAR (unsigned char)219
+#define CHAR (unsigned char)'/'
 #define SLEEP_TIME (unsigned int)50
+#define NEGATIVE_COLOR RED
+#define POSITIVE_COLOR GREEN
+#define NEUTRAL_COLOR DARKGRAY
+
 LPCWSTR help_text = L"Command listing \n\
 \"help\" -> shows this help text \n\
 \"create point <x> <y> <char> <name> <color>\" -> creates a point \n\
@@ -117,10 +121,12 @@ void create_point(vector<string>* args) {
 		color = colorMap.at(args->at(4));
 		Point* p = new Point(x, y, c, color, false);
 		sc->add((Shape*)p, name);
+		sc->setStatusLineColor(POSITIVE_COLOR);
 		sc->setStatusLine("created point " + name);
 		return;
 	}
 	catch (...) {
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("ERROR, syntax for create point is \"create point <x> <y> <char> <name> <color>\"");
 	}
 }
@@ -141,9 +147,11 @@ void create_line(vector<string>* args) {
 		color = colorMap.at(args->at(6));
 		shapes::Line* rec = new shapes::Line(x, y, c, color, false, dx, dy);
 		sc->add((Shape*)rec, name);
+		sc->setStatusLineColor(POSITIVE_COLOR);
 		sc->setStatusLine("created line " + name);
 	}
 	catch (...) {
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("ERROR, syntax for create line is \"create line <x> <y> <dx> <dy> <char> <name> <color>\"");
 	}
 }
@@ -163,9 +171,11 @@ void create_circle(vector<string>* args) {
 		color = colorMap.at(args->at(5));
 		Circle* circle = new Circle(x, y, c, color, false, r);
 		sc->add((Shape*)circle, name);
+		sc->setStatusLineColor(POSITIVE_COLOR);
 		sc->setStatusLine("created circle " + name);
 	}
 	catch (...) {
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("ERROR, syntax for create circle is \"create circle <x> <y> <radius> <char> <name> <color>\"");
 	}
 }
@@ -186,9 +196,11 @@ void create_rectangle(vector<string>* args) {
 		color = colorMap.at(args->at(6));
 		shapes::Rectangle* rec = new shapes::Rectangle(x, y, c, color, false, height, width);
 		sc->add((Shape*)rec, name);
+		sc->setStatusLineColor(POSITIVE_COLOR);
 		sc->setStatusLine("created rectangle " + name);
 	}
 	catch (...) {
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("ERROR, syntax for create rectangle is \"create rectangle <x> <y> <width> <height> <char> <name> <color>\"");
 	}
 }
@@ -211,9 +223,11 @@ void create_triangle(vector<string>* args) {
 		color = colorMap.at(args->at(8));
 		shapes::Triangle* rec = new shapes::Triangle(x, y, c, color, false, dx0, dy0, dx1, dy1);
 		sc->add((Shape*)rec, name);
+		sc->setStatusLineColor(POSITIVE_COLOR);
 		sc->setStatusLine("created line " + name);
 	}
 	catch (...) {
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("ERROR, syntax for create triangle is \"create triangle <x> <y> <dx0> <dy0> <dx1> <dx1> <char> <name> <color>\"");
 	}
 }
@@ -222,9 +236,11 @@ void create_triangle(vector<string>* args) {
 void change_char(vector<string>* args) {
 	try {
 		sc->get(args->at(0))->setC(fromString<char>(args->at(1)));
+		sc->setStatusLineColor(POSITIVE_COLOR);
 		sc->setStatusLine("changed char of " + args->at(0));
 	}
 	catch (...) {
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("ERROR, syntax for change char is \"change char <name> <new_char>\"");
 	}
 }
@@ -233,9 +249,11 @@ void change_char(vector<string>* args) {
 void change_color(vector<string>* args) {
 	try {
 		sc->get(args->at(0))->setColor(colorMap.at(args->at(1)));
+		sc->setStatusLineColor(POSITIVE_COLOR);
 		sc->setStatusLine("changed color of " + args->at(0));
 	}
 	catch (...) {
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("ERROR, syntax for change color \"change color <name> <new_color>\"");
 	}
 }
@@ -247,12 +265,15 @@ void hide(vector<string>* args) {
 		Shape* elem = sc->get(name);
 		if (elem) {
 			elem->Hide();
+			sc->setStatusLineColor(POSITIVE_COLOR);
 			sc->setStatusLine("hid " + name);
 			return;
 		}
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("could not find " + name);
 	}
 	catch (...) {
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("ERROR, syntax for hide is \"hide <name>\"");
 	}
 }
@@ -264,12 +285,15 @@ void show(vector<string>* args) {
 		Shape* elem = sc->get(name);
 		if (elem) {
 			elem->Show();
+			sc->setStatusLineColor(POSITIVE_COLOR);
 			sc->setStatusLine("hid " + name);
 			return;
 		}
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("could not find " + name);
 	}
 	catch (...) {
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("ERROR, syntax for show \"show <name>\"");
 	}
 }
@@ -286,13 +310,16 @@ void move(vector<string>* args) {
 		unsigned int dx = fromString<int>(args->at(1)), dy = fromString<int>(args->at(2));
 		Shape* elem = sc->get(name);
 		if (elem) {
-			sc->setStatusLine("moved " + name);
 			elem->MoveXY(dx, dy);
+			sc->setStatusLineColor(POSITIVE_COLOR);
+			sc->setStatusLine("moved " + name);
 			return;
 		}
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("could not find " + name);
 	}
 	catch (...) {
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("ERROR, syntax for move is \"move <name> <dx> <dy>\"");
 	}
 }
@@ -302,9 +329,11 @@ void erase(vector<string>* args) {
 	try {
 		string name = args->at(0);
 		sc->remove(name);
+		sc->setStatusLineColor(POSITIVE_COLOR);
 		sc->setStatusLine("removed " + name);
 	}
 	catch (...) {
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("ERROR, syntax for delete is \"delete <name>\"");
 	}
 }
@@ -313,9 +342,11 @@ void erase(vector<string>* args) {
 void shape_copy(vector<string>* args) {
 	try {
 		sc->copy(args->at(0), args->at(1));
+		sc->setStatusLineColor(POSITIVE_COLOR);
 		sc->setStatusLine("copied " + args->at(0));
 	}
 	catch (...) {
+		sc->setStatusLineColor(NEGATIVE_COLOR);
 		sc->setStatusLine("ERROR, syntax for copy is \"copy <name> <new_name>\"");
 	}
 }
@@ -334,6 +365,7 @@ void colors(vector<string>* args) {
 		}
 		colors += color.first;
 	}
+	sc->setStatusLineColor(NEUTRAL_COLOR);
 	sc->setStatusLine(colors);
 }
 
@@ -463,6 +495,9 @@ int _tmain(int argc, _TCHAR* argv[]) {
 	sc = new ShapeContainer(WIDTH, HEIGHT);
 	CommandNode* root = build_command_tree();
 	sc->setStatusLine("type \"help <enter>\" to get help!");
+	sc->setStatusLineColor(DARKGRAY);
+	sc->setPrompt("Command > ");
+	sc->setPromptColor(DARKGRAY);
 	sc->draw();
 
 	//do forever 

@@ -18,6 +18,7 @@ private:
 	mutex mtx;
 	Line* separationLine;
 	Text* statusLine;
+	Text* prompt;
 public:
 	ShapeContainer(int width, int height);
 	~ShapeContainer();
@@ -30,6 +31,10 @@ public:
 	void draw(bool clear);
 	ConsoleBuffer* getCBuffer();
 	void setStatusLine(string str);
+	void setStatusLineColor(unsigned int color);
+	void setPrompt(string str);
+	void setPromptColor(unsigned int color);
+
 	void resetCursor();
 };
 

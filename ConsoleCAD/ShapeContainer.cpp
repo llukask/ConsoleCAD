@@ -23,6 +23,7 @@ ShapeContainer::ShapeContainer(int width, int height) {
 	//some geometry for IO Section
 	separationLine = new shapes::Line(0, height, SEPARATION_CHAR, SEPARATION_COLOR, false, width, 0);
 	statusLine = new shapes::Text(0, height + 1, STATUSLINE_COLOR, false, "");
+	prompt = new shapes::Text(0, height + 2, DARKGRAY, false, "");
 	//clear screen and buffer
 	buffer->clearbuf();
 	buffer->clrscr();
@@ -88,6 +89,7 @@ void ShapeContainer::draw(bool clear) {
 	//draw the separation line and the statusText
 	separationLine->draw(buffer);
 	statusLine->draw(buffer);
+	prompt->draw(buffer);
 
 	buffer->draw();
 }
@@ -107,13 +109,26 @@ void ShapeContainer::setStatusLine(string str) {
 	statusLine->setText(str);
 }
 
+void ShapeContainer::setStatusLineColor(unsigned int color) {
+	statusLine->setColor(color);
+}
+
 //set cursor to beginning of last line
 void ShapeContainer::resetCursor() {
 	//Set cursor to last line
-	buffer->setcurpos(0, buffer->sizeY() - 1);
+	buffer->setcurpos(prompt->getText().size(), buffer->sizeY() - 1);
+
 }
 
 //remove a Shape
 void ShapeContainer::remove(string name) {
 	shapesMap->erase(name);
+}
+
+void ShapeContainer::setPrompt(string str) {
+	prompt->setText(str);
+}
+
+void ShapeContainer::setPromptColor(unsigned int color) {
+	prompt->setColor(color);
 }
