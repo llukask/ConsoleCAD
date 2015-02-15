@@ -71,7 +71,7 @@ namespace shapes {
 		unsigned int getRadius();
 		void setRadius(unsigned int radius);
 		virtual void draw(ConsoleBuffer* cb);
-		//virtual Shape* copy();
+		virtual Shape* copy();
 	};
 
 	class Text : public Shape {
@@ -79,8 +79,10 @@ namespace shapes {
 		string text;
 	public:
 		Text(unsigned int x, unsigned int y, char c, unsigned short color, bool hidden, string text);
+		string getText();
+		void setText(string _text);
 		virtual void draw(ConsoleBuffer* cb);
-		//virtual Shape* copy();
+		virtual Shape* copy();
 	};
 
 	class Triangle : public Shape {
@@ -90,7 +92,7 @@ namespace shapes {
 		Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _dx1, unsigned int _dy1, unsigned int _dx2, unsigned int _dy2);
 		unsigned int dx1, dy1, dx2, dy2;
 		virtual void draw(ConsoleBuffer* cb);
-		//virtual Shape* copy();
+		virtual Shape* copy();
 	};
 
 	class TextBox : public Shape {

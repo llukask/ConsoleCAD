@@ -4,6 +4,8 @@
 #include <map>
 #include <vector>
 
+//Node for a tree of commands either contains a tree of CommandNodes (subcommands) 
+//or a c-function pointer with the walk function one can walk the tree
 class CommandNode {
 private:
 	bool hasSubcommands;

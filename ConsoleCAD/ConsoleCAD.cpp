@@ -1,6 +1,3 @@
-// ConsoleCAD.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
 #include <iostream>
 #include "ConsoleBuffer.h"
@@ -18,16 +15,14 @@
 
 #define WIDTH 30
 #define HEIGHT 30
-#define CHAR 220
-#define SLEEP_TIME 50
+#define CHAR (unsigned char)219
+#define SLEEP_TIME (unsigned int)50
 
 using namespace std;
 using namespace std::chrono;
 
 ShapeContainer* sc;
-
 vector<Shape*>* _shapes;
-
 mutex mtx;
 
 const map<string, unsigned short> colorMap = { { "black", BLACK },
@@ -47,6 +42,7 @@ const map<string, unsigned short> colorMap = { { "black", BLACK },
 												{ "yellow", YELLOW },
 												{ "white", WHITE } };
 
+//pst
 void draw_cool_things(vector<string>* args) {
 	//ShapeContainer* sc = new ShapeContainer(107, 50);
 	Shape* circ = (Shape*)new Circle(11, 11, '*', RED, false, 10);
@@ -90,6 +86,7 @@ void hello_world(vector<string>* args) {
 	}
 }
 
+//create circle <x> <y> <radius> <char> <name> <color>
 void create_circle(vector<string>* args) {
 	if (args->size() == 6) {
 	int x, y, r;
@@ -104,27 +101,65 @@ void create_circle(vector<string>* args) {
 	color = colorMap.at(args->at(5));
 	Circle* circle = new Circle(x, y, c, color, false, r);
 	sc->add((Shape*)circle, name);
-	sc->draw();
+	sc->setStatusLine("created circle!");
 	}
 	
 }
 
+//hide <name>
 void hide(vector<string>* args) {
 	string name = args->at(0);
- 	sc->get(name)->Hide();
-	sc->draw();
+	Shape* elem = sc->get(name);
+	if (elem) {
+		elem->Hide();
+		sc->setStatusLine("hid " + name);
+		return;
+	}
+	sc->setStatusLine("could not find " + name);
 }
 
-//CommandNode* build_command_tree() {
-//	CommandNode* root = new CommandNode();
-//	root->AddSubcommand("hello", new CommandNode(hello_world));
-//	root->AddSubcommand("pst", new CommandNode(draw_cool_things));
-//	root->AddSubcommand("hide", new CommandNode(hide));
-//	CommandNode* create = new CommandNode();
-//	create->AddSubcommand("circle", new CommandNode(create_circle));
-//	root->AddSubcommand("create", create);
-//	return root;
-//}
+//show <name>
+void show(vector<string>* args) {
+	string name = args->at(0);
+	Shape* elem = sc->get(name);
+	if (elem) {
+		elem->Show();
+		sc->setStatusLine("hid " + name);
+		return;
+	}
+	sc->setStatusLine("could not find " + name);
+}
+
+//help
+void help(vector<string>* args) {
+	MessageBox(NULL, L"This should be helpful", L"Console CAD Help", MB_OK);
+}
+
+//move <name> <dx> <dy>
+void move(vector<string>* args) {
+	string name = args->at(0);
+	unsigned int dx = fromString<int>(args->at(1)), dy = fromString<int>(args->at(2));
+	Shape* elem = sc->get(name);
+	if (elem) {
+		sc->setStatusLine("moved " + name);
+		elem->MoveXY(dx, dy);
+		return;
+	}
+	sc->setStatusLine("could not find " + name);
+}
+
+//delete <name>
+void erase(vector<string>* args) {
+	string name = args->at(0);
+	sc->remove(name);
+	sc->setStatusLine("removed " + name);
+}
+
+//copy <name> <new_name>
+void shape_copy(vector<string>* args) {
+	sc->copy(args->at(0), args->at(1));
+	sc->setStatusLine("copied " + args->at(0));
+}
 
 void circles() {
 	for (int i = WIDTH / 2; i >= 0; i--) {
@@ -135,8 +170,8 @@ void circles() {
 		mtx.unlock();
 		Sleep(SLEEP_TIME);
 		/*for (Shape* cp : *_shapes) {
-			cp->setColor((rand() % 14) + 1);
-			}*/
+		cp->setColor((rand() % 14) + 1);
+		}*/
 		//sc->draw(false);
 	}
 }
@@ -150,7 +185,7 @@ void rects() {
 		mtx.unlock();
 		Sleep(SLEEP_TIME);
 		/*for (Shape* cp : *_shapes) {
-			cp->setColor((rand() % 14) + 1);
+		cp->setColor((rand() % 14) + 1);
 		}*/
 		//sc->draw(false);
 	}
@@ -164,11 +199,6 @@ void lines() {
 		_shapes->push_back(lin);
 		mtx.unlock();
 		Sleep(SLEEP_TIME);
-		/*for (Shape* cp : *_shapes) {
-			cp->setColor((rand() % 14) + 1);
-		}*/
-		//sc->draw(false);
-		//mtx.unlock();
 	}
 
 	for (int x = 0, y = HEIGHT; x + HEIGHT <= WIDTH - 1; x++) {
@@ -178,11 +208,6 @@ void lines() {
 		_shapes->push_back(lin);
 		mtx.unlock();
 		Sleep(SLEEP_TIME);
-		/*for (Shape* cp : *_shapes) {
-			cp->setColor((rand() % 14) + 1);
-		}*/
-		//sc->draw(false);
-		//mtx.unlock();
 	}
 
 	for (int x = HEIGHT, y = HEIGHT; x <= WIDTH - 1; x++) {
@@ -192,10 +217,6 @@ void lines() {
 		_shapes->push_back(lin);
 		mtx.unlock();
 		Sleep(SLEEP_TIME);
-		/*for (Shape* cp : *_shapes) {
-			cp->setColor((rand() % 14) + 1);
-		}*/
-		//sc->draw(false);
 	}
 }
 
@@ -213,40 +234,15 @@ void change_color() {
 void drawt() {
 	for (;;) {
 		/*for (Shape* cp : *_shapes) {
-			cp->setColor((rand() % 14) + 1);
+		cp->setColor((rand() % 14) + 1);
 		}*/
 		sc->draw(false);
 	}
 }
 
-int _tmain(int argc, _TCHAR* argv[]) {
-	//CommandNode* root = build_command_tree();
-	sc = new ShapeContainer(WIDTH, HEIGHT);
-
-	for (int i = HEIGHT/2; i >= 0; i--) {
-		Circle* c = new Circle(WIDTH/2, HEIGHT/2, 'o', i % 15, false, i);
-		c->draw(sc->getCBuffer());
-		sc->getCBuffer()->draw();
-	}
-	do {
-		sc->draw(true);
-		sc->getCBuffer()->setcurpos(0, HEIGHT);
-		std::string cmd;
-		std::getline(std::cin, cmd);
-		root->walk(cmd);
-	} while (true);
-	cin.ignore();*/
-
-
-	//draw_cool_things(NULL);
-
-	/*std::thread l_thread(lines);
-	std::thread r_thread(rects);
-	std::thread c_thread(circles);*/
-	//std::thread cc_thread(change_color);
+void lsd(vector<string>* args) {
 
 	_shapes = new vector<Shape*>();
-
 	SetConsoleOutputCP(437);
 
 	std::thread l_thr(lines);
@@ -254,8 +250,44 @@ int _tmain(int argc, _TCHAR* argv[]) {
 	std::thread c_thr(circles);
 	std::thread cc_thr(change_color);
 	std::thread drawer(drawt);
+}
+
+CommandNode* build_command_tree() {
+	CommandNode* root = new CommandNode();
+	root->AddSubcommand("hello", new CommandNode(hello_world));
+	root->AddSubcommand("pst", new CommandNode(draw_cool_things));
+	root->AddSubcommand("hide", new CommandNode(hide));
+	root->AddSubcommand("show", new CommandNode(show));
+	root->AddSubcommand("move", new CommandNode(move));
+	root->AddSubcommand("help", new CommandNode(help));
+	root->AddSubcommand("delete", new CommandNode(erase));
+	root->AddSubcommand("copy", new CommandNode(shape_copy));
+	root->AddSubcommand("lsd", new CommandNode(lsd));
+	CommandNode* create = new CommandNode();
+	create->AddSubcommand("circle", new CommandNode(create_circle));
+	root->AddSubcommand("create", create);
+	return root;
+}
+
+
+
+int _tmain(int argc, _TCHAR* argv[]) {
+	sc = new ShapeContainer(WIDTH, HEIGHT);
+	CommandNode* root = build_command_tree();
+	sc->draw();
+
+	do
+	{
+		sc->resetCursor();
+		string input;
+		getline(cin, input);
+		root->walk(input);
+		sc->draw();
+	} while (true);
 
 	cin.ignore();
+
+
  
 	return 0;
 }

@@ -3,15 +3,31 @@
 
 #include <chrono>
 #include <iostream>
+#include "Shapes.h"
+#include "Colors.h"
 
 using namespace std::chrono;
+
+#define IO_HEIGHT 3
+#define SEPARATION_CHAR '-'
+#define SEPARATION_COLOR WHITE
+#define STATUSLINE_COLOR DARKGRAY
 
 ShapeContainer::ShapeContainer(int width, int height) {
 	shapesMap = new map<string, Shape*>();
 	counter = 0;
-	buffer = new ConsoleBuffer(width, height);
+	buffer = new ConsoleBuffer(width, height + IO_HEIGHT);
+	separationLine = new shapes::Line(0, width, SEPARATION_CHAR, SEPARATION_COLOR, false, width, 0);
+	statusLine = new shapes::Text(0, width + 1, 0, STATUSLINE_COLOR, false, "");
 	buffer->clearbuf();
 	buffer->clrscr();
+}
+
+ShapeContainer::~ShapeContainer() {
+	delete buffer;
+	delete shapesMap;
+	delete separationLine;
+	delete statusLine;
 }
 
 void ShapeContainer::add(Shape* s, string str) {
@@ -26,8 +42,15 @@ void ShapeContainer::add(Shape* s) {
 
 Shape* ShapeContainer::get(string str) {
 	mtx.lock();
-	Shape* ret = shapesMap->find(str)->second;
-	return ret;
+	if (shapesMap->count(str) > 0) {
+		Shape* ret = shapesMap->find(str)->second;
+		mtx.unlock();
+		return ret;
+	}
+	else
+	{
+		return NULL;
+	}
 }
 
 void ShapeContainer::draw() {
@@ -35,19 +58,22 @@ void ShapeContainer::draw() {
 }
 
 void ShapeContainer::draw(bool clear) {
+	if (clear) {
+		buffer->clearbuf();
+		buffer->clrscr();
+	}
+
 	for (auto iter = shapesMap->begin(); iter != shapesMap->end(); iter++) {
-		if (!iter->second->Hidden()) {
+		if (!(iter->second->Hidden())) {
+			cout << "drew" << endl;
 			iter->second->draw(buffer);
 		}
 	}
-	if (clear) {
-		buffer->clrscr();
-	}
-	//high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
+	separationLine->draw(buffer);
+	statusLine->draw(buffer);
+
 	buffer->draw();
-	//high_resolution_clock::time_point t2 = high_resolution_clock::now();
-	//auto dur = duration_cast<microseconds>(t2 - t1).count();
-	//cout << dur;
 }
 
 ConsoleBuffer* ShapeContainer::getCBuffer() {
@@ -55,5 +81,18 @@ ConsoleBuffer* ShapeContainer::getCBuffer() {
 }
 
 void ShapeContainer::copy(std::string name, std::string copied_name) {
+	add(get(name)->copy(), copied_name);
+}
 
+void ShapeContainer::setStatusLine(string str) {
+	statusLine->setText(str);
+}
+
+void ShapeContainer::resetCursor() {
+	//Set cursor to last line
+	buffer->setcurpos(0, buffer->sizeY() - 1);
+}
+
+void ShapeContainer::remove(string name) {
+	shapesMap->erase(name);
 }

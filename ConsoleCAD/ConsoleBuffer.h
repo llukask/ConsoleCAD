@@ -4,6 +4,7 @@
 #include <vector>
 #include "Colors.h"
 
+
 typedef struct ColorChar {
 	char c;
 	unsigned short color;

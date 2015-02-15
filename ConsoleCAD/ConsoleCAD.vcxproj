@@ -156,6 +156,7 @@
     <ClInclude Include="utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CommandParser.cpp" />
     <ClCompile Include="ConsoleBuffer.cpp" />
     <ClCompile Include="ConsoleCAD.cpp" />
     <ClCompile Include="ShapeContainer.cpp" />
