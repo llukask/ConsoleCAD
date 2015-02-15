@@ -3,6 +3,8 @@
 
 #include <string>
 
+#define BRESENHAM
+
 using namespace shapes;
 
 //constructor for a shape/point
@@ -227,15 +229,23 @@ void Circle::draw(ConsoleBuffer* cb) {
 	ColorChar cc;
 	cc.c = getC();
 	cc.color = getColor();
-	/*const float PI = 3.14159f;
+
+
+	//my algorithm
+	//works reasonably fast but has problems with big circles > radius bigger than 100
+	//because there is to much distance between pixels
+#ifndef BRESENHAM
 	float _rad = (float)getRadius();
 	for (float angle = 0.0f; angle < 2 * PI; angle += 0.08f) {
 		cb->set(
 			getX() + (unsigned int)floor(_rad*cosf(angle) + 0.5),
 			getY() + (unsigned int)floor(_rad*sinf(angle) + 0.5),
 			cc);
-	}*/
+	}
+#endif
 
+#ifdef BRESENHAM
+	//Bresenhams algorithm
 	unsigned int x0 = getX();
 	unsigned int y0 = getY();
 
@@ -270,37 +280,45 @@ void Circle::draw(ConsoleBuffer* cb) {
 		cb->set(x0 + y, y0 - x, cc);
 		cb->set(x0 - y, y0 - x, cc);
 	}
+#endif
 }
 
+
+//creates a copy of a circle
 Shape* Circle::copy() {
 	return new Circle(getX(), getY(), getC(), getColor(), Hidden(), getRadius());
 }
 
-Text::Text(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, string _text)
-: Shape(_x, _y, _c, _color, _hidden) {
+Text::Text(unsigned int _x, unsigned int _y, unsigned short _color, bool _hidden, string _text)
+: Shape(_x, _y, ' ', _color, _hidden) {
 	text = _text;
 }
 
+//setter for the text
 void Text::setText(string _text) {
 	text = _text;
 }
 
+//getter for text
 string Text::getText() {
 	return text;
 }
 
+//"draws" text
 void Text::draw(ConsoleBuffer* cb) {
 	int _y = getY();
 	ColorChar cc;
 	cc.color = getColor();
+	//loop draws each individual character from text
 	for (unsigned int _x = getX(); _x < getX() + text.size(); _x++) {
 		cc.c = text[_x - getX()];
 		cb->set(_x, _y, cc);
 	}
 }
 
+//copies a text
 Shape* Text::copy() {
-	return new Text(getX(), getY(), getC(), getColor(), Hidden(), getText());
+	return new Text(getX(), getY(), getColor(), Hidden(), getText());
 }
 
 Triangle::Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _color, bool _hidden, unsigned int _dx1, unsigned int _dy1, unsigned int _dx2, unsigned int _dy2)
@@ -311,19 +329,24 @@ Triangle::Triangle(unsigned int _x, unsigned int _y, char _c, unsigned short _co
 	dy2 = _dy2;
 }
 
+//draws a triangle
 void Triangle::draw(ConsoleBuffer* cb) {
 	unsigned int x = getX();
 	unsigned int y = getY();
 
+	//disasemmble triangle into 3 lines
 	Line* l1 = new Line(x, y, getC(), getColor(), false, dx1, dy1);
 	Line* l2 = new Line(x + dx1, y + dy1, getC(), getColor(), false, dx2 - dx1, dy2 - dy1);
 	Line* l3 = new Line(x, y, getC(), getColor(), false, dx2, dy2);
 
+	//draw them
 	l1->draw(cb);
 	l2->draw(cb);
 	l3->draw(cb);
 }
 
+
+//copy a triangle
 Shape* Triangle::copy() {
 	return new Triangle(getX(), getY(), getC(), getColor(), Hidden(), dx1, dy1, dx2, dy2);
 }

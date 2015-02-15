@@ -78,7 +78,7 @@ namespace shapes {
 	private:
 		string text;
 	public:
-		Text(unsigned int x, unsigned int y, char c, unsigned short color, bool hidden, string text);
+		Text(unsigned int x, unsigned int y, unsigned short color, bool hidden, string text);
 		string getText();
 		void setText(string _text);
 		virtual void draw(ConsoleBuffer* cb);
@@ -94,11 +94,6 @@ namespace shapes {
 		virtual void draw(ConsoleBuffer* cb);
 		virtual Shape* copy();
 	};
-
-	class TextBox : public Shape {
-
-	};
-
 }
 
 

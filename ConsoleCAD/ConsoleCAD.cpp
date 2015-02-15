@@ -13,10 +13,25 @@
 #include <mutex>
 #include <Windows.h>
 
-#define WIDTH 30
-#define HEIGHT 30
+#define WIDTH 200
+#define HEIGHT 100
 #define CHAR (unsigned char)219
 #define SLEEP_TIME (unsigned int)50
+LPCWSTR help_text = L"Command listing \n\
+\"help\" -> shows this help text \n\
+\"create point <x> <y> <char> <name> <color>\" -> creates a point \n\
+\"create line <x> <y> <dx> <dy> <char> <name> <color>\" -> create a line \n\
+\"create circle <x> <y> <radius> <char> <name> <color>\" -> create a circle\n\
+\"create rectangle <x> <y> <width> <height> <char> <name> <color>\" -> create a rectangle\n\
+\"create triangle <x> <y> <dx0> <dy0> <dx1> <dx1> <char> <name> <color>\" -> create a triangle\n\
+\"change char <name> <new_char>\" -> changes the char of a shape\n\
+\"change color <name> <new_color>\" -> changes the color of a shape \n\
+\"move <name> <dx> <dy>\" -> moves a shape \n\
+\"hide <name>\" -> hides a shape \n\
+\"show <name>\" -> unhide a shape \n\
+\"erase <name>\" -> erase a shape \n\
+\"copy <name> <new_name>\" -> copy a shape \n\
+\"colors\" -> shows a list of possible colors";
 
 using namespace std;
 using namespace std::chrono;
@@ -42,6 +57,8 @@ const map<string, unsigned short> colorMap = { { "black", BLACK },
 												{ "yellow", YELLOW },
 												{ "white", WHITE } };
 
+//command functions
+
 //pst
 void draw_cool_things(vector<string>* args) {
 	//ShapeContainer* sc = new ShapeContainer(107, 50);
@@ -50,7 +67,7 @@ void draw_cool_things(vector<string>* args) {
 	Shape* l1 = (Shape*)new Line(51, 1, '\\', LIGHTBLUE, false, 20, 20);
 	Shape* l2 = (Shape*)new Line(51, 21, '/', LIGHTBLUE, false, 20, -20);
 	Shape* tri = (Shape*)new Triangle(76, 21, 'A', LIGHTGREEN, false, 15, -20, 30, 0);
-	Shape* tex = (Shape*)new Text(96, 23, ' ', WHITE, false, "\x0A9 Sony Inc.");
+	Shape* tex = (Shape*)new Text(96, 23, WHITE, false, "\x0A9 Sony Inc.");
 
 	sc->add(circ);
 	sc->add(rect);
@@ -69,7 +86,7 @@ void draw_cool_things(vector<string>* args) {
 		sc->add(sg_circ, "sg_" + to_string(r));
 	}
 
-	Shape* text1 = (Shape*)new Text(7, 49, ' ', WHITE, false, "Stargate SG-1");
+	Shape* text1 = (Shape*)new Text(7, 49, WHITE, false, "Stargate SG-1");
 	sc->add(text1);
 
 	//Shape* ds_circ1 = (Shape*)new Circle()
@@ -86,79 +103,238 @@ void hello_world(vector<string>* args) {
 	}
 }
 
+//create point <x> <y> <char> <name> <color>
+void create_point(vector<string>* args) {
+	try {
+		int x, y;
+		char c;
+		string name;
+		unsigned int color;
+		x = fromString<int>(args->at(0));
+		y = fromString<int>(args->at(1));
+		c = fromString<char>(args->at(2));
+		name = args->at(3);
+		color = colorMap.at(args->at(4));
+		Point* p = new Point(x, y, c, color, false);
+		sc->add((Shape*)p, name);
+		sc->setStatusLine("created point " + name);
+		return;
+	}
+	catch (...) {
+		sc->setStatusLine("ERROR, syntax for create point is \"create point <x> <y> <char> <name> <color>\"");
+	}
+}
+
+//create line <x> <y> <dx> <dy> <char> <name> <color>
+void create_line(vector<string>* args) {
+	try {
+		int x, y, dx, dy;
+		char c;
+		string name;
+		unsigned short color;
+		x = fromString<int>(args->at(0));
+		y = fromString<int>(args->at(1));
+		dx = fromString<int>(args->at(2));
+		dy = fromString<int>(args->at(3));
+		c = fromString<char>(args->at(4));
+		name = args->at(5);
+		color = colorMap.at(args->at(6));
+		shapes::Line* rec = new shapes::Line(x, y, c, color, false, dx, dy);
+		sc->add((Shape*)rec, name);
+		sc->setStatusLine("created line " + name);
+	}
+	catch (...) {
+		sc->setStatusLine("ERROR, syntax for create line is \"create line <x> <y> <dx> <dy> <char> <name> <color>\"");
+	}
+}
+
 //create circle <x> <y> <radius> <char> <name> <color>
 void create_circle(vector<string>* args) {
-	if (args->size() == 6) {
-	int x, y, r;
-	char c;
-	string name;
-	unsigned short color;
-	x = fromString<int>(args->at(0));
-	y = fromString<int>(args->at(1));
-	r = fromString<int>(args->at(2));
-	c = fromString<char>(args->at(3));
-	name = args->at(4);
-	color = colorMap.at(args->at(5));
-	Circle* circle = new Circle(x, y, c, color, false, r);
-	sc->add((Shape*)circle, name);
-	sc->setStatusLine("created circle!");
+	try {
+		int x, y, r;
+		char c;
+		string name;
+		unsigned short color;
+		x = fromString<int>(args->at(0));
+		y = fromString<int>(args->at(1));
+		r = fromString<int>(args->at(2));
+		c = fromString<char>(args->at(3));
+		name = args->at(4);
+		color = colorMap.at(args->at(5));
+		Circle* circle = new Circle(x, y, c, color, false, r);
+		sc->add((Shape*)circle, name);
+		sc->setStatusLine("created circle " + name);
 	}
-	
+	catch (...) {
+		sc->setStatusLine("ERROR, syntax for create circle is \"create circle <x> <y> <radius> <char> <name> <color>\"");
+	}
+}
+
+//create rectangle <x> <y> <width> <height> <char> <name> <color>
+void create_rectangle(vector<string>* args) {
+	try {
+		int x, y, width, height;
+		char c;
+		string name;
+		unsigned short color;
+		x = fromString<int>(args->at(0));
+		y = fromString<int>(args->at(1));
+		width = fromString<int>(args->at(2));
+		height = fromString<int>(args->at(3));
+		c = fromString<char>(args->at(4));
+		name = args->at(5);
+		color = colorMap.at(args->at(6));
+		shapes::Rectangle* rec = new shapes::Rectangle(x, y, c, color, false, height, width);
+		sc->add((Shape*)rec, name);
+		sc->setStatusLine("created rectangle " + name);
+	}
+	catch (...) {
+		sc->setStatusLine("ERROR, syntax for create rectangle is \"create rectangle <x> <y> <width> <height> <char> <name> <color>\"");
+	}
+}
+
+//create triangle <x> <y> <dx0> <dy0> <dx1> <dx1> <char> <name> <color>
+void create_triangle(vector<string>* args) {
+	try {
+		int x, y, dx0, dy0, dx1, dy1;
+		char c;
+		string name;
+		unsigned short color;
+		x = fromString<int>(args->at(0));
+		y = fromString<int>(args->at(1));
+		dx0 = fromString<int>(args->at(2));
+		dy0 = fromString<int>(args->at(3));
+		dx1 = fromString<int>(args->at(4));
+		dy1 = fromString<int>(args->at(5));
+		c = fromString<char>(args->at(6));
+		name = args->at(7);
+		color = colorMap.at(args->at(8));
+		shapes::Triangle* rec = new shapes::Triangle(x, y, c, color, false, dx0, dy0, dx1, dy1);
+		sc->add((Shape*)rec, name);
+		sc->setStatusLine("created line " + name);
+	}
+	catch (...) {
+		sc->setStatusLine("ERROR, syntax for create triangle is \"create triangle <x> <y> <dx0> <dy0> <dx1> <dx1> <char> <name> <color>\"");
+	}
+}
+
+//change char <name> <new_char>
+void change_char(vector<string>* args) {
+	try {
+		sc->get(args->at(0))->setC(fromString<char>(args->at(1)));
+		sc->setStatusLine("changed char of " + args->at(0));
+	}
+	catch (...) {
+		sc->setStatusLine("ERROR, syntax for change char is \"change char <name> <new_char>\"");
+	}
+}
+
+//change color <name> <new_color>
+void change_color(vector<string>* args) {
+	try {
+		sc->get(args->at(0))->setColor(colorMap.at(args->at(1)));
+		sc->setStatusLine("changed color of " + args->at(0));
+	}
+	catch (...) {
+		sc->setStatusLine("ERROR, syntax for change color \"change color <name> <new_color>\"");
+	}
 }
 
 //hide <name>
 void hide(vector<string>* args) {
-	string name = args->at(0);
-	Shape* elem = sc->get(name);
-	if (elem) {
-		elem->Hide();
-		sc->setStatusLine("hid " + name);
-		return;
+	try {
+		string name = args->at(0);
+		Shape* elem = sc->get(name);
+		if (elem) {
+			elem->Hide();
+			sc->setStatusLine("hid " + name);
+			return;
+		}
+		sc->setStatusLine("could not find " + name);
 	}
-	sc->setStatusLine("could not find " + name);
+	catch (...) {
+		sc->setStatusLine("ERROR, syntax for hide is \"hide <name>\"");
+	}
 }
 
 //show <name>
 void show(vector<string>* args) {
-	string name = args->at(0);
-	Shape* elem = sc->get(name);
-	if (elem) {
-		elem->Show();
-		sc->setStatusLine("hid " + name);
-		return;
+	try {
+		string name = args->at(0);
+		Shape* elem = sc->get(name);
+		if (elem) {
+			elem->Show();
+			sc->setStatusLine("hid " + name);
+			return;
+		}
+		sc->setStatusLine("could not find " + name);
 	}
-	sc->setStatusLine("could not find " + name);
+	catch (...) {
+		sc->setStatusLine("ERROR, syntax for show \"show <name>\"");
+	}
 }
 
 //help
 void help(vector<string>* args) {
-	MessageBox(NULL, L"This should be helpful", L"Console CAD Help", MB_OK);
+	MessageBox(NULL, help_text, L"Console CAD Help", MB_OK);
 }
 
 //move <name> <dx> <dy>
 void move(vector<string>* args) {
-	string name = args->at(0);
-	unsigned int dx = fromString<int>(args->at(1)), dy = fromString<int>(args->at(2));
-	Shape* elem = sc->get(name);
-	if (elem) {
-		sc->setStatusLine("moved " + name);
-		elem->MoveXY(dx, dy);
-		return;
+	try {
+		string name = args->at(0);
+		unsigned int dx = fromString<int>(args->at(1)), dy = fromString<int>(args->at(2));
+		Shape* elem = sc->get(name);
+		if (elem) {
+			sc->setStatusLine("moved " + name);
+			elem->MoveXY(dx, dy);
+			return;
+		}
+		sc->setStatusLine("could not find " + name);
 	}
-	sc->setStatusLine("could not find " + name);
+	catch (...) {
+		sc->setStatusLine("ERROR, syntax for move is \"move <name> <dx> <dy>\"");
+	}
 }
 
 //delete <name>
 void erase(vector<string>* args) {
-	string name = args->at(0);
-	sc->remove(name);
-	sc->setStatusLine("removed " + name);
+	try {
+		string name = args->at(0);
+		sc->remove(name);
+		sc->setStatusLine("removed " + name);
+	}
+	catch (...) {
+		sc->setStatusLine("ERROR, syntax for delete is \"delete <name>\"");
+	}
 }
 
 //copy <name> <new_name>
 void shape_copy(vector<string>* args) {
-	sc->copy(args->at(0), args->at(1));
-	sc->setStatusLine("copied " + args->at(0));
+	try {
+		sc->copy(args->at(0), args->at(1));
+		sc->setStatusLine("copied " + args->at(0));
+	}
+	catch (...) {
+		sc->setStatusLine("ERROR, syntax for copy is \"copy <name> <new_name>\"");
+	}
+}
+
+//colors
+void colors(vector<string>* args) {
+	string colors = "";
+	bool first = true;
+	for (auto color : colorMap) {
+		if (!first) {
+			colors += ", ";
+		}
+		else
+		{
+			first = false;
+		}
+		colors += color.first;
+	}
+	sc->setStatusLine(colors);
 }
 
 void circles() {
@@ -220,7 +396,7 @@ void lines() {
 	}
 }
 
-void change_color() {
+void color_change() {
 	for (;;) {
 		mtx.lock();
 		for (Shape* cp : *_shapes) {
@@ -240,6 +416,7 @@ void drawt() {
 	}
 }
 
+
 void lsd(vector<string>* args) {
 
 	_shapes = new vector<Shape*>();
@@ -248,7 +425,7 @@ void lsd(vector<string>* args) {
 	std::thread l_thr(lines);
 	std::thread r_thr(rects);
 	std::thread c_thr(circles);
-	std::thread cc_thr(change_color);
+	std::thread cc_thr(color_change);
 	std::thread drawer(drawt);
 }
 
@@ -263,32 +440,48 @@ CommandNode* build_command_tree() {
 	root->AddSubcommand("delete", new CommandNode(erase));
 	root->AddSubcommand("copy", new CommandNode(shape_copy));
 	root->AddSubcommand("lsd", new CommandNode(lsd));
+	root->AddSubcommand("colors", new CommandNode(colors));
 	CommandNode* create = new CommandNode();
+	create->AddSubcommand("point", new CommandNode(create_point));
 	create->AddSubcommand("circle", new CommandNode(create_circle));
+	create->AddSubcommand("rectangle", new CommandNode(create_rectangle));
+	create->AddSubcommand("line", new CommandNode(create_line));
+	create->AddSubcommand("triangle", new CommandNode(create_triangle));
 	root->AddSubcommand("create", create);
+
+	CommandNode* change = new CommandNode();
+	change->AddSubcommand("char", new CommandNode(change_char));
+	change->AddSubcommand("color", new CommandNode(change_color));
+	root->AddSubcommand("change", change);
 	return root;
 }
 
 
 
 int _tmain(int argc, _TCHAR* argv[]) {
+	//initiate ShapeContainer and command tree
 	sc = new ShapeContainer(WIDTH, HEIGHT);
 	CommandNode* root = build_command_tree();
+	sc->setStatusLine("type \"help <enter>\" to get help!");
 	sc->draw();
 
+	//do forever 
 	do
-	{
+	{	
+		//set cursor to last line
 		sc->resetCursor();
+		//get 1 line of input
 		string input;
 		getline(cin, input);
+		if (input.empty()) {
+			break;
+		}
+		//walk the command tree with input
 		root->walk(input);
+		//redraw
 		sc->draw();
 	} while (true);
 
-	cin.ignore();
-
-
- 
 	return 0;
 }
 

@@ -83,7 +83,7 @@ unsigned int ConsoleBuffer::sizeX() {
 }
 
 void ConsoleBuffer::setcurpos(unsigned int x, unsigned int y) {
-	//set cursir position
+	//set cursor position
 	HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD co;
 	co.X = x;
